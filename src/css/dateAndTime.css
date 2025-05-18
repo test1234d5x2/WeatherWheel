@@ -1,0 +1,48 @@
+.inputContainer {
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack child elements vertically */
+    align-items: center; /* Align child elements in the center horizontally */
+    text-align: center;
+}
+
+.timeInputGroup {
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Align child elements in the center vertically */
+    gap: 0.1em; /* Space between label and input */
+}
+
+.buttonGroup {
+    display: flex; /* Use flexbox for layout */
+    gap: 0.2em; /* Space between buttons */
+}
+
+.timeInput {
+    background: rgba(255, 255, 255, 0.30); /* Semi-transparent white */
+    color: white; /* Text color */
+}
+
+.dateAndTimeText{
+    color: #FFF; /* White text color */
+    text-align: left; /* Align text to the left */
+    font-family: Inter; /* Font family set to Inter */
+    font-size: 18px; /* Font size */
+    font-style: normal; /* Normal font style */
+    font-weight: 400; /* Font weight (normal) */
+    line-height: normal; /* Normal line height */
+    padding: 0.1em; /* Padding around the text */
+}
+
+button, input{
+    background: rgba(255, 255, 255, 0.30); /* Semi-transparent white background for buttons and input fields */
+    color: #FFF; /* White text color for buttons and input fields */
+    border: solid rgba(255, 255, 255, 0.30) 2px; /* Semi-transparent white border for buttons and input fields */
+}
+.timeWidget{
+    overflow: auto;
+}
+@media screen and (max-width: 900px) {
+    .inputContainer{
+        flex-direction: row;
+        gap: 0.2em;
+    }
+}

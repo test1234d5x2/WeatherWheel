@@ -1,0 +1,31 @@
+body {
+    margin: 0; /* Removes default margin */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif; /* Sets a series of fallback font families */
+    -webkit-font-smoothing: antialiased; /* Improves the readability of text on webkit browsers */
+    -moz-osx-font-smoothing: grayscale; /* Improves text readability on Firefox for macOS */
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace; /* Sets a series of fonts for displaying code, favoring monospace fonts */
+}
+
+html, body {
+	/*background: linear-gradient(90deg, rgba(96,202,244,1) 0%, rgba(58,129,243,1) 100%); */
+	/*background: linear-gradient(90deg, rgba(207,207,207,1) 0%, rgba(148,148,148,1) 100%); */
+	/*background: linear-gradient(90deg, rgba(38,92,151,1) 0%, rgba(18,42,70,1) 100%); */
+	min-width: 100vw; /* Sets a minimum width to the full width of the viewport */
+    min-height: 100vh; /* Sets a minimum height to the full height of the viewport */
+}
+
+body {
+    /*background-image: linear-gradient(to bottom right, #61cdf4, #2c68f2); *//* Sets a linear gradient as the background */
+    min-width: 100vw; /* Ensures the body takes at least the full width of the viewport */
+    min-height: 100vh; /* Ensures the body takes at least the full height of the viewport */
+}
+
+#root {
+    min-height: 100vh; /* Ensures the root element takes at least the full height of the viewport */
+}

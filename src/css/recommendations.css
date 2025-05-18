@@ -1,0 +1,63 @@
+/* Container for the recommendations page */
+.RecommendationsPageContainer {
+    display: flex; /* Using flexbox for layout */
+    width: 98vw; /* 98% of the viewport width */
+    height: 90vh; /* 90% of the viewport height */
+    column-gap: 20px; /* Spacing between columns */
+}
+
+/* Styles for the advice container */
+.adviceContainer {
+    flex: 3; /* Take up 3 times the space of other containers */
+    border-radius: 50px; /* Rounded corners */
+    background: rgba(255, 253, 253, 0.3); /* Semi-transparent background */
+    margin: 1em; /* Margin around the container */
+    overflow: hidden; /* Hide overflow content */
+}
+
+/* Styles for the warnings container */
+.warningsContainer {
+    flex: 2; /* Take up 2 times the space of other containers */
+    border-radius: 50px; /* Rounded corners */
+    background: rgba(253, 254, 255, 0.30); /* Semi-transparent background */
+    margin: 1em; /* Margin around the container */
+}
+
+/* Styles for paragraphs inside the recommendations page container */
+.RecommendationsPageContainer p {
+    color: #FFF; /* White text color */
+    font-family: Inter; /* Font family */
+    font-size: 24px; /* Font size */
+    font-style: normal; /* Normal font style */
+    font-weight: 400; /* Normal font weight */
+    line-height: normal; /* Normal line height */
+    margin: 1em; /* Margin around paragraphs */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 900px) {
+    .RecommendationsPageContainer {
+        flex-direction: column; /* Stack containers vertically */
+        overflow: auto; /* Enable scrolling if content overflows */
+        height: 100vh;
+    }
+
+    .RecommendationsPageContainer p {
+        align-items: center; /* Center-align items */
+        margin: 0.5em; /* Reduce margin around paragraphs */
+    }
+    .warningsContainer {
+        font-size: small; /* Reduce font size for warnings container */
+        margin: 0.5em; /* Reduce margin around warnings container */
+    }
+    .adviceContainer {
+        overflow-y: auto;
+    }
+    .adviceText p {
+        font-size: 1.3rem;
+        text-align: center; /* Center-align paragraphs inside advice container */
+    }
+    .adviceText {
+        text-align: center; /* Center-align text inside advice container */
+    }
+}
