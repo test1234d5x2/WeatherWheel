@@ -7,7 +7,7 @@
 /* Main grid layout for various components */
 main {
     display: grid; /* Using grid layout for the main content */
-    grid-template-columns: 30% 45% 25%; /* Defining three columns with specific widths */
+    grid-template-columns: 40% 20% 40%; /* Defining three columns with specific widths */
     grid-template-rows: 40vh 25vh 25vh; /* Defining three rows with specific heights */
     grid-template-areas: /* Naming areas in the grid for positioning components */
         "map summary warnings"
@@ -401,7 +401,7 @@ main {
 /*Advice Widget */
 
 /* Styles for the advice widget */
-.adviceWidget {
+.weatherWidget {
     grid-area:advice;
     flex-shrink: 0;
     border-radius: 50px;

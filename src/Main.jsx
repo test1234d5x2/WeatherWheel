@@ -8,8 +8,6 @@ import { WeatherDetailsFocus } from "./WeatherDetailsFocus";
 import { RecommendationsDetails } from "./RecommendationsDetails";
 import jsonData from "./weatherAdvice.json";
 import jsonDataWarning from "./weatherWarnings.json";
-import { AdviceComponent } from "./AdviceComponent";
-import DateAndTime from "./DateAndTime";
 import { EditableComponent } from "./EditableSection";
 
 
@@ -64,7 +62,7 @@ export class Main extends React.Component {
 		})
 
         // Fetch weather forecast data on an hourly basis.
-        fetch("https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=" + String(lat) + "&lon=" + String(long) + "&appid=" + process.env.REACT_APP_OPENWEATHER_API_KEY).then((response) => (response.json())).then((data) => {
+        fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + String(lat) + "&lon=" + String(long) + "&appid=" + process.env.REACT_APP_OPENWEATHER_API_KEY).then((response) => (response.json())).then((data) => {
             this.setState((state) => {
                 return {
                     "forecastData": data,
@@ -75,7 +73,7 @@ export class Main extends React.Component {
         })
 
         // Fetch current weather data
-        fetch("https://pro.openweathermap.org/data/2.5/weather?lat=" + String(lat) + "&lon=" + String(long) + "&appid=" + process.env.REACT_APP_OPENWEATHER_API_KEY).then((response) => (response.json())).then((data) => {
+        fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + String(lat) + "&lon=" + String(long) + "&appid=" + process.env.REACT_APP_OPENWEATHER_API_KEY).then((response) => (response.json())).then((data) => {
             this.setState((state) => {
                 return {
                     "currentWeatherData": data,
@@ -229,37 +227,31 @@ export class Main extends React.Component {
         else {
             elementsShown = (
                 <main>
-                        <section className="mapWidget">
-                            <div className="mapImage2">
-                                <Map startLat={this.state.startLat} startLong={this.state.startLong} endLat={this.state.endLat} endLong={this.state.endLong} mapLineCoordinates={this.state.mapLineCoordinates} />
+                    <section className="mapWidget">
+                        <div className="mapImage2">
+                            <Map startLat={this.state.startLat} startLong={this.state.startLong} endLat={this.state.endLat} endLong={this.state.endLong} mapLineCoordinates={this.state.mapLineCoordinates} />
+                        </div>
+                        <div className="mapText">
+                            <div className = "locationInput">
+                                <EditableComponent updateLocationInfo={this.updateStartInfo} name={this.state.startName} />
+                                <img className="arrow" alt="arrow" src={ require('./css/assets/arrowRight.png') } />
+                                <EditableComponent updateLocationInfo={this.updateDestinationInfo} name={this.state.endName}/>
                             </div>
-                            <div className="mapText">
-                                <div className = "locationInput">
-                                    <EditableComponent updateLocationInfo={this.updateStartInfo} name={this.state.startName} />
-                                    <img className="arrow" alt="arrow" src={ require('./css/assets/arrowRight.png') } />
-                                    <EditableComponent updateLocationInfo={this.updateDestinationInfo} name={this.state.endName}/>
-                                </div>
-                            </div>
-                        </section>
-                        <section className="Weather">
-                            <WeatherSummary data={this.state.currentWeatherData} placeName={this.state.startName} />
-                        </section>
-                        <section className="warningsWidget">
-                            <WeatherWarnings data = {jsonDataWarning} currentWeatherData = {this.state.currentWeatherData} vehicle={this.state.vehicle} warnings={this.state.alerts === null ? null: this.state.alerts} />
-                        </section>
-                        <section className="timeWidget">
-                                <div className="dateAndTimeText"></div><DateAndTime handleCallback={this.setTimes} />
-                        </section>
-                        <section className="weatherWidget">
-                            <ForecastData data={this.state.forecastData} startTime={this.state.startTime} endTime={this.state.endTime} />
-                        </section>
-                        <section className="vehicleWidget">
-                            <span className="vehicleText">Vehicle</span>
-                            <VehicleSelection setVehicle={this.setVehicle}/>
-                        </section>
-                        <section className="adviceWidget">
-                            <AdviceComponent data={jsonData} currentWeatherData = {this.state.currentWeatherData} vehicle={this.state.vehicle}/>
-                        </section>
+                        </div>
+                    </section>
+                    <section className="Weather">
+                        <WeatherSummary data={this.state.currentWeatherData} placeName={this.state.startName} />
+                    </section>
+                    <section className="warningsWidget">
+                        <WeatherWarnings data = {jsonDataWarning} currentWeatherData = {this.state.currentWeatherData} vehicle={this.state.vehicle} warnings={this.state.alerts === null ? null: this.state.alerts} />
+                    </section>
+                    <section className="vehicleWidget">
+                        <span className="vehicleText">Vehicle</span>
+                        <VehicleSelection setVehicle={this.setVehicle}/>
+                    </section>
+                    <section className="weatherWidget">
+                        <ForecastData data={this.state.forecastData} startTime={this.state.startTime} endTime={this.state.endTime} />
+                    </section>
                 </main>
             )
         }

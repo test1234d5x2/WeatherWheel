@@ -1,8 +1,6 @@
 import React from "react";
-import jsonData from "./weatherAdvice.json"; // Importing weather advice data from a JSON file
 import { AdviceComponent } from "./AdviceComponent";
 import { WeatherWarnings } from "./WeatherWarnings";
-import jsonDataWarning from "./weatherWarnings.json";
 
 // Display driving recommendations to the user based on vehicle type. Also display an warnings available.
 export class RecommendationsDetails extends React.Component {
@@ -15,8 +13,6 @@ export class RecommendationsDetails extends React.Component {
     
     render() {
 
-        //<WeatherWarnings data = {this.props.jsonDataWarning} currentWeatherData = {this.props.currentWeatherData} vehicle={this.props.vehicle} warnings={this.props.warnings} />
-        //<AdviceComponent data={this.props.jsonData} currentWeatherData = {this.props.currentWeatherData} vehicle={this.props.vehicle}/>
         return (
             <div className="RecommendationsPageContainer">
                 <div className="adviceContainer">

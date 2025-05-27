@@ -5,9 +5,10 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 
 
 const WEATHER_LAYER_CODES = {
-    "Temperature": "TA2",
-    "Rain": "PA0",
-    "Clouds": "CL",
+    "Temperature": "temp_new",
+    "Rain": "precipitation_new",
+    "Clouds": "clouds_new",
+	"Wind": "wind_new"
 }
 
 
@@ -108,7 +109,7 @@ export class Map extends React.Component {
 
 						return (
 							<LayersControl.BaseLayer name={weatherLayer}>
-								<TileLayer url={"http://maps.openweathermap.org/maps/2.0/weather/" + WEATHER_LAYER_CODES[weatherLayer] + "/{z}/{x}/{y}?appid=" + process.env.REACT_APP_OPENWEATHER_API_KEY} attribution="<a href='https://openweathermap.org/'>OpenWeather</a>" eventHandlers={{add: (event) => {return this.setChosenWeatherLayer(weatherLayer)}}} />
+								<TileLayer url={`https://tile.openweathermap.org/map/${WEATHER_LAYER_CODES[weatherLayer]}/{z}/{x}/{y}.png?appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`} attribution="<a href='https://openweathermap.org/'>OpenWeather</a>" eventHandlers={{add: (event) => {return this.setChosenWeatherLayer(weatherLayer)}}} />
 							</LayersControl.BaseLayer>
 						)
 					})}
