@@ -21,11 +21,13 @@ html, body {
 }
 
 body {
-    /*background-image: linear-gradient(to bottom right, #61cdf4, #2c68f2); *//* Sets a linear gradient as the background */
+    background-image: linear-gradient(to bottom right, #61cdf4, #2c68f2); /* Sets a linear gradient as the background */
     min-width: 100vw; /* Ensures the body takes at least the full width of the viewport */
     min-height: 100vh; /* Ensures the body takes at least the full height of the viewport */
 }
 
 #root {
     min-height: 100vh; /* Ensures the root element takes at least the full height of the viewport */
+    display: flex;
+    flex-direction: column;
 }

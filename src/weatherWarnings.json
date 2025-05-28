@@ -5,7 +5,7 @@
     "rainText" : ["Reduced visibility due to heavy rainfall", "Roads may be slippery when wet"],
     "SnowText" : ["Ice on roads make skidding more likely", "Avoid back roads that are less liekly to have been treated"],
     "windText" : ["High winds may unsettle vehicle", "Reduced visibility may make other vehicles difficult to see"],
-    "generalText" : ["Leave a two second gap between you and the car in front of you"]
+    "generalText" : ["Leave a two second gap between you and the vehicle in front of you"]
 }],
 "van": [
     {"stormText" : ["Be aware of stopping distances", "Test brakes as soon as you drive through a large body of water","Reduced visibility due to heavy rainfall", "Roads may be slippery when wet", "High winds may unsettle vehicle"],
@@ -13,7 +13,7 @@
     "rainText" : ["Be aware of stopping distances","Reduced visibility due to heavy rainfall", "Roads may be slippery when wet"],
     "SnowText" : ["In icy conditions, breaking distances can be up to ten times greater","Ice on roads make skidding more likely", "Avoid back roads that are less liekly to have been treated"],
     "windText" : ["Van's hight makes it more suseptible to stong winds", "High winds may unsettle vehicle", "Reduced visibility may make other vehicles difficult to see"],
-    "generalText" : ["Avoid puddles or pot holes", "Leave a two second gap between you and the car in front of you"]
+    "generalText" : ["Avoid puddles or pot holes", "Leave a two second gap between you and the vehicle in front of you"]
 }],
 "motorbike":[
     {"stormText" : ["Wear bright colours for increased visibility to others","Reduced visibility due to heavy rainfall", "Roads may be slippery when wet", "High winds may unsettle vehicle"],
@@ -21,5 +21,5 @@
     "rainText" : ["Wear bright colours for increased visibility to others","Reduced visibility due to heavy rainfall", "Roads may be slippery when wet"],
     "SnowText" : ["Check the tread depth of your tyres", "Ice on roads make skidding more likely", "Avoid back roads that are less liekly to have been treated"],
     "windText" : ["Wear bright colours for increased visibility to others","High winds may unsettle vehicle", "Reduced visibility may make other vehicles difficult to see"],
-    "generalText" : ["Inspect your motorbike before each ride","Leave a two second gap between you and the car in front of you"]
+    "generalText" : ["Inspect your motorbike before each ride","Leave a two second gap between you and the vehicle in front of you"]
 }]}

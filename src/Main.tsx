@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback, JSX } from "react";
-import { Map } from "./Map"; 
-import { WeatherSummary } from "./WeatherSummary"; 
-import { WeatherWarnings } from "./WeatherWarnings"; 
-import { ForecastData } from "./ForecastData"; 
-import { VehicleSelection } from "./VehicleSelection"; 
-import { WeatherDetailsFocus } from "./WeatherDetailsFocus"; 
-import { EditableComponent } from "./EditableSection"; 
+import { Map } from "./Map";
+import { WeatherSummary } from "./WeatherSummary";
+import { WeatherWarnings } from "./WeatherWarnings";
+import { ForecastData } from "./ForecastData";
+import { VehicleSelection } from "./VehicleSelection";
+import { EditableComponent } from "./EditableSection";
 import jsonDataWarning from "./weatherWarnings.json";
 import ShowingPage from "./types/pageType";
 import VehicleType from "./types/vehicleType";
@@ -80,14 +79,6 @@ interface OpenRouteServiceResponse {
     };
 }
 
-interface AdviceTexts {
-    stormText: string[];
-    rainText: string[];
-    SnowText: string[];
-    windText: string[];
-    generalText: string[];
-}
-
 interface AdviceWarningsData {
     [vehicleType: string]: AdviceWarningTexts[];
 }
@@ -128,8 +119,6 @@ export const Main: React.FC<MainProps> = ({ showing }) => {
     const [forecastData, setForecastData] = useState<OpenWeatherForecastResponse | null>(null);
     const [currentWeatherData, setCurrentWeatherData] = useState<CurrentWeatherData | null>(null);
     const [mapLineCoordinates, setMapLineCoordinates] = useState<number[][]>([]);
-    const [startTime, setStartTimeState] = useState<string | null>(null); // Renamed to avoid conflict with setTimes callback
-    const [endTime, setEndTimeState] = useState<string | null>(null);     // Renamed to avoid conflict with setTimes callback
     const [vehicle, setVehicleState] = useState<VehicleType>("car");      // Renamed to avoid conflict with setVehicle callback
 
     // --- Callbacks for State Updates ---
@@ -173,10 +162,6 @@ export const Main: React.FC<MainProps> = ({ showing }) => {
      * @param {string} newEndTime - The selected end time string (e.g., "17:00").
      * @description Updates the start and end times in the component's state.
      */
-    const setTimes = useCallback((newStartTime: string, newEndTime: string): void => {
-        setStartTimeState(newStartTime);
-        setEndTimeState(newEndTime);
-    }, []); // No dependencies for this callback as it only sets state
 
 
     // --- useEffect Hooks for Data Fetching ---
@@ -184,13 +169,13 @@ export const Main: React.FC<MainProps> = ({ showing }) => {
     // Effect for initial default location setup (replaces componentDidMount)
     useEffect(() => {
         updateStartInfo(51.513263, -0.089878, "City of London");
-    }, [updateStartInfo]); // Dependency: updateStartInfo (stable due to useCallback)
+    }, []); // Dependency: updateStartInfo (stable due to useCallback)
 
     // Effect for fetching weather data (forecast and current) based on start location
     useEffect(() => {
         if (startLocation.lat !== null && startLocation.long !== null) {
             // Fetch weather forecast data on an hourly basis.
-            fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${startLocation.lat}&lon=${startLocation.long}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`)
+            fetch(`https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=${startLocation.lat}&lon=${startLocation.long}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`)
                 .then(response => response.json())
                 .then((data: OpenWeatherForecastResponse) => {
                     if (data.cod === "200") { // Check if API call was successful
@@ -209,7 +194,7 @@ export const Main: React.FC<MainProps> = ({ showing }) => {
             fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${startLocation.lat}&lon=${startLocation.long}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`)
                 .then(response => response.json())
                 .then((data: CurrentWeatherData) => {
-                    if (data.cod === "200") { // OpenWeatherMap returns numerical cod for current weather
+                    if (!Object.keys(data).includes("code")) { // OpenWeatherMap returns numerical cod for current weather
                         setCurrentWeatherData(data);
                     } else {
                         console.error("OpenWeatherMap Current Weather API Error:");
@@ -252,6 +237,9 @@ export const Main: React.FC<MainProps> = ({ showing }) => {
                         // the approximate distance is larger than 6000km. In this case,
                         // just add the start and end coordinates to give one straight line.
                         console.warn("OpenRouteService Error:", data.error.message);
+                        if (startLocation.lat && endLocation.lat && startLocation.long && endLocation.long) {
+                            coordinates.push([startLocation.lat, startLocation.long], [endLocation.lat, endLocation.long])
+                        }
                     } else if (data.features && data.features.length > 0) {
                         // Gets the coordinates for the specific route (so that it can be placed as a line on the map).
                         coordinates = data.features[0].geometry.coordinates.map((item) => [item[1], item[0]]); // Convert [long, lat] to [lat, long]
@@ -269,12 +257,12 @@ export const Main: React.FC<MainProps> = ({ showing }) => {
     }, [startLocation.lat, startLocation.long, endLocation.lat, endLocation.long]); // Dependencies: all coordinates
 
     // --- Conditional Rendering based on 'showing' prop ---
-    let elementsShown: JSX.Element | null = null;
+    let elementsShown;
 
     if (showing === "map") {
         elementsShown = (
             <main>
-                <div className="mainMap" style={{ width: "90vw", height: "50vh", padding: "4vw" }}>
+                <div className="mainMap" style={{ width: "90vw", height: "70vh", padding: "4vw" }}>
                     <Map
                         startLat={startLocation.lat}
                         startLong={startLocation.long}
@@ -292,51 +280,30 @@ export const Main: React.FC<MainProps> = ({ showing }) => {
                 </div>
             </main>
         );
-    } else if (showing === "details") {
+    } else {
         elementsShown = (
             <main>
-                <WeatherDetailsFocus currentWeatherData={currentWeatherData} forecastData={forecastData} />
-            </main>
-        );
-    } else { // Default to "home" view
-        elementsShown = (
-            <main>
-                <section className="mapWidget">
-                    <div className="mapImage2">
-                        <Map
-                            startLat={startLocation.lat}
-                            startLong={startLocation.long}
-                            endLat={endLocation.lat}
-                            endLong={endLocation.long}
-                            mapLineCoordinates={mapLineCoordinates}
-                        />
-                    </div>
-                    <div className="mapText">
-                        <div className="locationInput">
-                            <EditableComponent updateLocationInfo={updateStartInfo} name={startLocation.name} />
-                            <img className="arrow" alt="arrow" src={require('./css/assets/arrowRight.png')} />
-                            <EditableComponent updateLocationInfo={updateDestinationInfo} name={endLocation.name} />
-                        </div>
-                    </div>
-                </section>
                 <section className="Weather">
                     <WeatherSummary data={currentWeatherData} placeName={startLocation.name || "Loading..."} />
                 </section>
-                <section className="warningsWidget">
-                    <WeatherWarnings
-                        data={jsonDataWarning as AdviceWarningsData} // Type assertion for imported JSON
-                        currentWeatherData={currentWeatherData}
-                        vehicle={vehicle}
-                        warnings={alerts}
-                    />
-                </section>
-                <section className="vehicleWidget">
-                    <span className="vehicleText">Vehicle</span>
-                    <VehicleSelection setVehicle={setVehicle} />
-                </section>
                 <section className="weatherWidget">
-                    <ForecastData data={forecastData} startTime={startTime} endTime={endTime} />
+                    <ForecastData data={forecastData} />
                 </section>
+                <section style={{display: "flex"}}>
+                    <section className="warningsWidget">
+                        <WeatherWarnings
+                            data={jsonDataWarning as AdviceWarningsData} // Type assertion for imported JSON
+                            currentWeatherData={currentWeatherData}
+                            vehicle={vehicle}
+                            warnings={alerts}
+                        />
+                    </section>
+                    <section className="vehicleWidget">
+                        <span className="vehicleText">Vehicle</span>
+                        <VehicleSelection setVehicle={setVehicle} />
+                    </section>
+                </section>
+
             </main>
         );
     }

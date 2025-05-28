@@ -33,31 +33,3 @@
     line-height: normal; /* Normal line height */
     margin: 1em; /* Margin around paragraphs */
 }
-
-/* Media query for smaller screens */
-@media (max-width: 900px) {
-    .RecommendationsPageContainer {
-        flex-direction: column; /* Stack containers vertically */
-        overflow: auto; /* Enable scrolling if content overflows */
-        height: 100vh;
-    }
-
-    .RecommendationsPageContainer p {
-        align-items: center; /* Center-align items */
-        margin: 0.5em; /* Reduce margin around paragraphs */
-    }
-    .warningsContainer {
-        font-size: small; /* Reduce font size for warnings container */
-        margin: 0.5em; /* Reduce margin around warnings container */
-    }
-    .adviceContainer {
-        overflow-y: auto;
-    }
-    .adviceText p {
-        font-size: 1.3rem;
-        text-align: center; /* Center-align paragraphs inside advice container */
-    }
-    .adviceText {
-        text-align: center; /* Center-align text inside advice container */
-    }
-}

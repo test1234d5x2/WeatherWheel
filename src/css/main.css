@@ -6,16 +6,10 @@
 
 /* Main grid layout for various components */
 main {
-    display: grid; /* Using grid layout for the main content */
-    grid-template-columns: 40% 20% 40%; /* Defining three columns with specific widths */
-    grid-template-rows: 40vh 25vh 25vh; /* Defining three rows with specific heights */
-    grid-template-areas: /* Naming areas in the grid for positioning components */
-        "map summary warnings"
-        "times weather vehicle"
-        "advice advice advice";
-    width: 100%; /* Width calculation for responsiveness */
-    height: 90vh; /* Height of the main area */
+    display: flex;
+    flex-direction: column;
 }
+
 .warning
 {
     width: fit-content ;
@@ -50,15 +44,11 @@ main {
     flex: 1; /* Flex grow factor */
     border-radius: 50px; /* Rounded corners */
     background: rgba(253, 254, 255, 0.30); /* Semi-transparent background */
-    height: 25vh; /* Height of each column */
-    margin: 1em; /* Margin around columns */
     padding: 0.5em; /* Padding inside columns */
     text-align: center; /* Center-align text */
 }
 
-.weatherContainer {
-    height: 50vh; /* Height of the weather container */
-}
+
 
 
 /* Specific paragraphs text styles in weather container */
@@ -90,28 +80,6 @@ main {
     overflow: hidden;
 }
 
-/* Map widget styles */
-.mapWidget {
-    grid-area: map; /* Position in the map area of the grid */
-    flex-shrink: 0; /* Prevent shrinking */
-    border-radius: 50px; /* Rounded corners */
-    background: rgba(253, 254, 255, 0.30); /* Semi-transparent background */
-    flex: 2; /* Flex grow factor */
-    text-align: center; /* Center-align text */
-    padding: 2vw; /* Padding inside widget */
-    margin: 1em; /* Margin around widget */
-    display: grid; /* Using grid layout inside map widget */
-    grid-template-rows: 80% 20%; /* Row sizing within widget */
-    grid-template-areas: 
-        "map"
-        "text";
-    justify-content: center; /* Center content horizontally */
-    overflow:hidden;
-
-}
-.mapText{
-    width: 100%;
-}
 .warningsSymbol .warningsText
 {
     width: fit-content;
@@ -149,12 +117,6 @@ main {
 	cursor: pointer;
 }
 
-/* Styles for map images */
-.mapImage2{
-    grid-area: map;
-    width: 25vw;
-    border-radius: 50px;
-}
 
 /* Styles for arrow icons */
 .arrow{
@@ -320,57 +282,6 @@ main {
     background: url("assets/warningSymbol.png"), lightgray 50% / cover no-repeat, lightgray 50% / cover no-repeat;
     mix-blend-mode: screen;
     padding-right: 0.5rem;
-}
-
-/*Time Widget*/
-
-/* Styles for the time widget */ 
-.timeWidget {
-    grid-area:times;
-    flex-shrink: 0;
-    border-radius: 50px;
-    background: rgba(255, 255, 255, 0.30);
-    flex: 2;
-    margin: 1.5em;
-    padding: 1em;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    overflow-y: hidden;
-    overflow-x: scroll;
-    scrollbar-width: none;
-}
-
-/* Styles for displayed times in time widget */
-.timeWidget .displayTimes{
-    display: flex;
-    padding: 1em;
-    justify-content: center;
-
-}
-
-/* Styles for time text in time widget */
-.timeWidget
-.timeText {
-    color: #FFF;
-    font-family: Inter;
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    padding: 0.5em;
-}
-
-/* Styles for times in time widget */
-.timeWidget
-.times {
-    color: #FFF;
-    font-family: Inter;
-    font-size: 1rem;
-    font-style: italic;
-    font-weight: 400;
-    line-height: normal;
-    padding: 0.5em;
 }
 
 

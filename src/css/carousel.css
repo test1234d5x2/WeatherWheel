@@ -45,18 +45,3 @@
 .carousel-images .carousel-image:first-child {
     display: block; /* Display the first image in the carousel */
 }
-
-
-@media screen and (max-width: 900px) {
-    .carousel-images .carousel-image {
-        /* width: 50%; Removed or adjusted as necessary */
-        display: none; /* Hide images by default */
-        /* padding-left: 4em; Removed or adjusted as necessary */
-        mix-blend-mode: screen; /* Blend mode for images */
-        width: 7vw; /* Adjust if necessary for smaller screens */
-        height: 7vh; /* Adjust if necessary for smaller screens */
-        /* padding: 2em; Consider adjusting or removing */
-        border: solid black; /* Border around images */
-        /* margin-left: 15em; Removed to allow flexbox to center items */
-    }
-}

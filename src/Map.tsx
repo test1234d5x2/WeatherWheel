@@ -6,10 +6,9 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 
 // Define the structure for the weather layer codes.
 const WEATHER_LAYER_CODES: { [key: string]: string } = {
-    "Temperature": "temp_new",
-    "Rain": "precipitation_new",
-    "Clouds": "clouds_new",
-    "Wind": "wind_new"
+    "Temperature": "TA2",
+    "Rain": "PA0",
+    "Clouds": "CL",
 };
 
 /**
@@ -189,7 +188,7 @@ export const Map: React.FC<MapProps> = ({
                 {Object.keys(WEATHER_LAYER_CODES).map((weatherLayerKey) => (
                     <LayersControl.BaseLayer name={weatherLayerKey} key={weatherLayerKey}>
                         <TileLayer
-                            url={`https://tile.openweathermap.org/map/${WEATHER_LAYER_CODES[weatherLayerKey]}/{z}/{x}/{y}.png?appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`}
+                            url={`https://maps.openweathermap.org/maps/2.0/weather/${WEATHER_LAYER_CODES[weatherLayerKey]}/{z}/{x}/{y}?appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`}
                             attribution="<a href='https://openweathermap.org/'>OpenWeather</a>"
                             eventHandlers={{
                                 add: () => handleWeatherLayerAdd({ name: weatherLayerKey }) // Pass the layer key to the handler

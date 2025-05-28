@@ -89,7 +89,7 @@ export const WeatherDetailsFocus: React.FC<WeatherDetailsFocusProps> = ({ curren
             <div className="weather-details-focus-area">
                  <div className="weatherWidget">               
                     {/* Render ForecastData only if forecastData is available */}
-                    <ForecastData data={forecastData} startTime={null} endTime={null} />
+                    <ForecastData data={forecastData} />
                 </div>
                 {/* Optionally display a loading message or placeholder for current weather */}
                 <p>Loading current weather details...</p>
@@ -106,7 +106,7 @@ export const WeatherDetailsFocus: React.FC<WeatherDetailsFocusProps> = ({ curren
         <div className="weather-details-focus-area">
             <div className="weatherWidget">
                 {/* Pass forecastData to the ForecastData component */}
-                <ForecastData data={forecastData} startTime={null} endTime={null} />
+                <ForecastData data={forecastData} />
             </div>
             <div className="weatherContainer">
                 <div className="row">

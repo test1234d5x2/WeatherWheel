@@ -33,7 +33,7 @@ export class WeatherSummary extends React.Component {
             document.body.style.backgroundImage = "linear-gradient(to bottom right, #bda18c, #18191A)";
         }
         else{
-            document.body.style.backgroundImage = "linear-gradient(to bottom right, #E4E6EB, #18191A)";
+            document.body.style.backgroundImage = "linear-gradient(to bottom right,rgb(101, 102, 104), #18191A)";
         }
     
     }
