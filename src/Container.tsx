@@ -1,21 +1,19 @@
-import React, { useState, useCallback } from "react";
 import { Main } from "./Main";
-import ShowingPage from "./types/pageType";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { Map } from "./Map";
 
-interface ContainerProps {}
-
-
-export const Container: React.FC<ContainerProps> = () => {
-    const [showing, setShowing] = useState<ShowingPage>("home")
-
-    const changeDataShown = useCallback((newDataToBeShown: ShowingPage): void => {
-        setShowing(newDataToBeShown);
-    }, [])
+export const Container: React.FC = () => {
+    const navigate = useNavigate();
 
     return (
         <div className="main-container">
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-            <Main showing={showing} />
+            <main className="app-content">
+                <Routes>
+                    <Route path="/" element={<Main />} />
+                    <Route path="/map" element={<Map mapLineCoordinates={[]} startLat={55} startLong={55} endLat={null} endLong={null} />} />
+                </Routes>
+            </main>
         </div>
     );
 };

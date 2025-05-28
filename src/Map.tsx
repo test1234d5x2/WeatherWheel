@@ -173,45 +173,47 @@ export const Map: React.FC<MapProps> = ({
 
 
     return (
-        <MapContainer center={defaultCentreLatLang} zoom={5} style={{ height: '100%', width: "100%" }} whenReady={handleMapContainerReady}>
-            {/* MapInitializer is a child component that uses useMap() to get the map instance */}
-            <MapInitializer onMapReady={handleMapInstanceReady} />
+        <div style={{width: "100vw", height: "100vh"}}>
+            <MapContainer center={defaultCentreLatLang} zoom={5} style={{ height: '100%', width: "100%" }} whenReady={handleMapContainerReady}>
+                {/* MapInitializer is a child component that uses useMap() to get the map instance */}
+                <MapInitializer onMapReady={handleMapInstanceReady} />
 
-            {/* OpenStreetMap Tile Layer */}
-            <TileLayer
-                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
+                {/* OpenStreetMap Tile Layer */}
+                <TileLayer
+                    url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
 
-            {/* LayersControl for weather overlays */}
-            <LayersControl position="topright">
-                {Object.keys(WEATHER_LAYER_CODES).map((weatherLayerKey) => (
-                    <LayersControl.BaseLayer name={weatherLayerKey} key={weatherLayerKey}>
-                        <TileLayer
-                            url={`https://maps.openweathermap.org/maps/2.0/weather/${WEATHER_LAYER_CODES[weatherLayerKey]}/{z}/{x}/{y}?appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`}
-                            attribution="<a href='https://openweathermap.org/'>OpenWeather</a>"
-                            eventHandlers={{
-                                add: () => handleWeatherLayerAdd({ name: weatherLayerKey }) // Pass the layer key to the handler
-                            }}
-                        />
-                    </LayersControl.BaseLayer>
-                ))}
-            </LayersControl>
+                {/* LayersControl for weather overlays */}
+                <LayersControl position="topright">
+                    {Object.keys(WEATHER_LAYER_CODES).map((weatherLayerKey) => (
+                        <LayersControl.BaseLayer name={weatherLayerKey} key={weatherLayerKey}>
+                            <TileLayer
+                                url={`https://maps.openweathermap.org/maps/2.0/weather/${WEATHER_LAYER_CODES[weatherLayerKey]}/{z}/{x}/{y}?appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`}
+                                attribution="<a href='https://openweathermap.org/'>OpenWeather</a>"
+                                eventHandlers={{
+                                    add: () => handleWeatherLayerAdd({ name: weatherLayerKey }) // Pass the layer key to the handler
+                                }}
+                            />
+                        </LayersControl.BaseLayer>
+                    ))}
+                </LayersControl>
 
-            {/* Render Polyline if coordinates exist */}
-            {mapLineCoordinates.length > 0 && (
-                // Cast mapLineCoordinates to LatLngExpression[] to satisfy Polyline's positions prop
-                <Polyline positions={mapLineCoordinates as LatLngExpression[]} pathOptions={{ color: "black", opacity: 1 }} />
-            )}
+                {/* Render Polyline if coordinates exist */}
+                {mapLineCoordinates.length > 0 && (
+                    // Cast mapLineCoordinates to LatLngExpression[] to satisfy Polyline's positions prop
+                    <Polyline positions={mapLineCoordinates as LatLngExpression[]} pathOptions={{ color: "black", opacity: 1 }} />
+                )}
 
-            {/* Render Starting Point Marker */}
-            {startingPointMarker}
+                {/* Render Starting Point Marker */}
+                {startingPointMarker}
 
-            {/* Render Destination Marker */}
-            {destinationMarker}
+                {/* Render Destination Marker */}
+                {destinationMarker}
 
-            {/* Adjust map center/zoom based on available coordinates */}
-            <ChangeCentre latLangBounds={boundsToFit} />
-        </MapContainer>
+                {/* Adjust map center/zoom based on available coordinates */}
+                <ChangeCentre latLangBounds={boundsToFit} />
+            </MapContainer>
+        </div>
     );
 };

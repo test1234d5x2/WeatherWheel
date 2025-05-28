@@ -1,41 +1,21 @@
-/*weather Widget */
 
-.weatherWidget {
-    display: flex;
-    justify-content: center;
-    flex-shrink: 0; /* Prevents the widget from shrinking */
-    border-radius: 50px; /* Rounded corners for the widget */
-    background: rgba(255, 255, 255, 0.30); /* Semi-transparent white background */
-    flex: 3; /* Flex grow factor */
-    margin: 1.5em; /* Margin around the widget */
-}
 
 .weatherWidget
 .timesText {
     /* Styles for the text displaying times within the weather widget */
     color: #FFF;
     text-align: center;
-    font-family: Inter;
     font-size: 20px;
-    font-style: normal;
     font-weight: 400;
     line-height: normal;
 
-}
-.column
-{
-    max-height: 100%;
-    scrollbar-width: none;
 }
 
 .weatherWidget
 .weatherSymbol {
     /* Styles for the weather symbols within the widget */
-    width: 4vw;
-    height: 6vh;
     flex-shrink: 0;
     padding: 0.2em;
-    mix-blend-mode: screen;
 }
 
 .weatherWidget
@@ -43,7 +23,6 @@
     /* Styles for the temperature text within the widget */
     color: #FFF;
     text-align: center;
-    font-family: Inter;
     font-size: 18px;
     font-style: normal;
     font-weight: 400;

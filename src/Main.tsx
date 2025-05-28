@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback, JSX } from "react";
-import { Map } from "./Map";
+import React, { useState, useEffect, useCallback } from "react";
 import { WeatherSummary } from "./WeatherSummary";
 import { WeatherWarnings } from "./WeatherWarnings";
 import { ForecastData } from "./ForecastData";
 import { VehicleSelection } from "./VehicleSelection";
 import { EditableComponent } from "./EditableSection";
 import jsonDataWarning from "./weatherWarnings.json";
-import ShowingPage from "./types/pageType";
 import VehicleType from "./types/vehicleType";
 
 
@@ -92,19 +90,13 @@ interface AdviceWarningTexts {
 }
 
 
-// --- Props Interface for Main Component ---
-interface MainProps {
-    showing: ShowingPage;
-}
-
 /**
  * @function Main
- * @param {MainProps} props - The properties passed to the component.
  * @description Renders the components of each main page (Home, Map, Advice, Details)
  * based on the `showing` prop, and manages various application states including
  * location, weather data, and vehicle selection.
  */
-export const Main: React.FC<MainProps> = ({ showing }) => {
+export const Main: React.FC = () => {
     const [alerts, setAlerts] = useState<WeatherAPIAlert[] | null>(null);
     const [startLocation, setStartLocation] = useState<{ lat: number | null; long: number | null; name: string | null }>({
         lat: null,
@@ -256,57 +248,31 @@ export const Main: React.FC<MainProps> = ({ showing }) => {
         }
     }, [startLocation.lat, startLocation.long, endLocation.lat, endLocation.long]); // Dependencies: all coordinates
 
-    // --- Conditional Rendering based on 'showing' prop ---
-    let elementsShown;
 
-    if (showing === "map") {
-        elementsShown = (
-            <main>
-                <div className="mainMap" style={{ width: "90vw", height: "70vh", padding: "4vw" }}>
-                    <Map
-                        startLat={startLocation.lat}
-                        startLong={startLocation.long}
-                        endLat={endLocation.lat}
-                        endLong={endLocation.long}
-                        mapLineCoordinates={mapLineCoordinates}
+    return (
+        <main>
+            <section className="Weather">
+                <a href="map">Map</a>
+                <WeatherSummary data={currentWeatherData} placeName={startLocation.name || "Loading..."} />
+            </section>
+            <section className="weatherWidget">
+                <ForecastData data={forecastData} />
+            </section>
+            <section style={{display: "flex", columnGap: "2rem"}}>
+                <section className="warningsWidget">
+                    <WeatherWarnings
+                        data={jsonDataWarning as AdviceWarningsData} // Type assertion for imported JSON
+                        currentWeatherData={currentWeatherData}
+                        vehicle={vehicle}
+                        warnings={alerts}
                     />
-                    <div className="mapText">
-                        <div className="locationInput">
-                            <EditableComponent updateLocationInfo={updateStartInfo} name={startLocation.name} />
-                            <img className="arrow" alt="arrow" src={require('./css/assets/arrowRight.png')} />
-                            <EditableComponent updateLocationInfo={updateDestinationInfo} name={endLocation.name} />
-                        </div>
-                    </div>
-                </div>
-            </main>
-        );
-    } else {
-        elementsShown = (
-            <main>
-                <section className="Weather">
-                    <WeatherSummary data={currentWeatherData} placeName={startLocation.name || "Loading..."} />
                 </section>
-                <section className="weatherWidget">
-                    <ForecastData data={forecastData} />
+                <section className="vehicleWidget">
+                    <span className="vehicleText">Vehicle</span>
+                    <VehicleSelection setVehicle={setVehicle} />
                 </section>
-                <section style={{display: "flex"}}>
-                    <section className="warningsWidget">
-                        <WeatherWarnings
-                            data={jsonDataWarning as AdviceWarningsData} // Type assertion for imported JSON
-                            currentWeatherData={currentWeatherData}
-                            vehicle={vehicle}
-                            warnings={alerts}
-                        />
-                    </section>
-                    <section className="vehicleWidget">
-                        <span className="vehicleText">Vehicle</span>
-                        <VehicleSelection setVehicle={setVehicle} />
-                    </section>
-                </section>
+            </section>
 
-            </main>
-        );
-    }
-
-    return elementsShown;
+        </main>
+    );
 };

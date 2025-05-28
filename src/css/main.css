@@ -1,92 +1,17 @@
-/* Main container for the layout */
-.main-container {
-    display: flex; /* Using flexbox for the main container */
-    flex-direction: column; /* Items are stacked vertically */
-}
-
 /* Main grid layout for various components */
 main {
     display: flex;
     flex-direction: column;
+    row-gap: 3rem;
 }
 
-.warning
-{
-    width: fit-content ;
-    height: fit-content;
-    overflow: auto;
-    gap: 0.7em;
-}
-/* Styles for containers in the grid */
-.warningsContainer, .adviceContainer {
-    padding: 2em; /* Padding inside warnings and advice containers */
-}
-
-/* General component styles */
-.component {
-    text-align: center; /* Center-align text within components */
-    padding: 1vw; /* Padding inside components */
-}
-
-/* Flexbox row layout */
-.row {
-    width: 100%; /* Full width for the row */
-    display: flex; /* Using flexbox for rows */
-    align-items: center; /* Vertically center items in the row */
-    justify-content: space-between; /* Distribute space between items */
-    column-gap: 2vw; /* Gap between columns */
-}
-
-
-
-/* Styles specific to the weather container */
-.weatherContainer .column {
-    flex: 1; /* Flex grow factor */
-    border-radius: 50px; /* Rounded corners */
-    background: rgba(253, 254, 255, 0.30); /* Semi-transparent background */
-    padding: 0.5em; /* Padding inside columns */
-    text-align: center; /* Center-align text */
-}
-
-
-
-
-/* Specific paragraphs text styles in weather container */
-.weatherContainer p{
-    color: #FFF;
-    font-family: Inter;
-    font-style: normal;
-    line-height: normal;
-}
-
-/* Specific titles text styles in weather container */
-.weatherContainer .title{
-    font-size: 2rem;
-    font-weight: 500;
-}
-
-/* Specific values text styles in weather container */
-.weatherContainer .value{
-    font-size: 5rem;
-    padding-bottom:0.5em;
-}
 .Weather div
 {
-    display: grid;
-    row-gap: 2rem;
-    width: 100%;
-    height: 100%;
-    grid-gap: 20px;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
 }
 
-.warningsSymbol .warningsText
-{
-    width: fit-content;
-    height: fit-content;
-}
-
-/* Styles for location input area */
 .locationInput{
     flex: 1;
     display: flex;
@@ -129,7 +54,6 @@ main {
 .mapText {
     color: #FFF;
     text-align: center;
-    font-family: Inter;
     font-size: 1rem;
     font-style: normal;
     font-weight: 700;
@@ -137,11 +61,6 @@ main {
     justify-content: center;
     padding: 0.3em;
 
-}
-
-/* Styles for Leaflet map container */
-.leaflet-container {
-    border-radius: 20px;
 }
 
 /* Styles for map legend */
@@ -174,7 +93,6 @@ main {
 
 /* Styles for the weather widget */
 .Weather{
-    grid-area: summary;
     flex: 3;
     text-align: center;
     align-items: center;
@@ -186,7 +104,7 @@ main {
 .Weather .locationText {
     color: #FFF;
     text-align: center;
-    font-family: Inter;
+    
     font-size: 2.3rem;
     font-style: normal;
     font-weight: 700;
@@ -196,7 +114,7 @@ main {
 /* Styles for date text in weather widget */ 
 .Weather .dateText {
     color: #FFF;
-    font-family: Inter;
+    
     font-size: 1.2rem;
     font-style: normal;
     font-weight: 700;
@@ -206,7 +124,7 @@ main {
 /* Styles for temperature text in weather widget */
 .Weather .tempText {
     color: #FFF;
-    font-family: Inter;
+    
     font-size: 5.5rem;
     font-style: normal;
     font-weight: 700;
@@ -216,7 +134,7 @@ main {
 /* Styles for description text in weather widget */
 .Weather .descriptionText {
     color: #FFF;
-    font-family: Inter;
+    
     font-size: 1.5rem;
     font-style: normal;
     font-weight: 700;
@@ -228,14 +146,12 @@ main {
 
 /* Styles for the warnings widget */
 .warningsWidget {
-    grid-area:warnings;
     flex-shrink: 0;
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.30);
     flex: 1;
     text-align: center;
     padding: 0.5vw;
-    margin: 1.5em;
     overflow: hidden;
 }
 
@@ -243,7 +159,7 @@ main {
 .warningsTitle {
     color: #FCFCFC;
     text-align: center;
-    font-family: Inter;
+    
     font-size: 1.4rem;
     font-style: normal;
     font-weight: 700;
@@ -266,7 +182,7 @@ main {
     flex-shrink: 0;
     color: #FFF;
     text-align: center;
-    font-family: Inter;
+    
     font-size: 1rem;
     font-style: normal;
     font-weight: 400;
@@ -293,7 +209,6 @@ main {
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.30);
     flex: 1;
-    margin: 1.5em;
     text-align: center;
     padding: 1em;
 }
@@ -302,7 +217,7 @@ main {
 .vehicleText {
     color: #FFF;
     text-align: center;
-    font-family: Inter;
+    
     font-size: 1.3rem;
     font-style: normal;
     font-weight: 700;
@@ -313,11 +228,9 @@ main {
 
 /* Styles for the advice widget */
 .weatherWidget {
-    grid-area:advice;
     flex-shrink: 0;
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.30);
-    margin: 1.5em;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: none;
@@ -331,7 +244,6 @@ main {
     flex-shrink: 0;
     color: #FFF;
     text-align: center;
-    font-family: Inter;
     font-size: 1.2rem;
     font-style: normal;
     font-weight: 400;
