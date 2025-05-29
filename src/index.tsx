@@ -8,6 +8,8 @@ import './css/carousel.css';
 import 'leaflet/dist/leaflet.css';
 import { Container } from './Container';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 
 const rootElement = document.getElementById('root') as HTMLElement;
@@ -15,8 +17,10 @@ const root = ReactDOM.createRoot(rootElement);
 
 root.render(
     <React.StrictMode>
-        <Router>
-            <Container />
-        </Router>
+        <Provider store={store}>
+            <Router>
+                <Container />
+            </Router>
+        </Provider>
     </React.StrictMode>
 );

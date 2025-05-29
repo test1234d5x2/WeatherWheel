@@ -1,5 +1,5 @@
 import { Main } from "./Main";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Map } from "./Map";
 
 export const Container: React.FC = () => {
@@ -11,7 +11,7 @@ export const Container: React.FC = () => {
             <main className="app-content">
                 <Routes>
                     <Route path="/" element={<Main />} />
-                    <Route path="/map" element={<Map mapLineCoordinates={[]} startLat={55} startLong={55} endLat={null} endLong={null} />} />
+                    <Route path="/map" element={<Map />} />
                 </Routes>
             </main>
         </div>

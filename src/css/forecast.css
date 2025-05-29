@@ -1,8 +1,5 @@
-
-
 .weatherWidget
 .timesText {
-    /* Styles for the text displaying times within the weather widget */
     color: #FFF;
     text-align: center;
     font-size: 20px;
@@ -11,16 +8,9 @@
 
 }
 
-.weatherWidget
-.weatherSymbol {
-    /* Styles for the weather symbols within the widget */
-    flex-shrink: 0;
-    padding: 0.2em;
-}
 
 .weatherWidget
 .temperatureText {
-    /* Styles for the temperature text within the widget */
     color: #FFF;
     text-align: center;
     font-size: 18px;
@@ -30,56 +20,22 @@
     padding: 0.2em;
 }
 
-/* Forecast Data Summary Component. */
 
 .forecast-data-section-container {
     display: flex;
+}
+
+.forecast-data-section {
+    text-align: center;
+    display: flex;
+    column-gap: 3rem;
+    height: 25vh;
     overflow-x: scroll;
     scrollbar-width: none;
 }
 
-.forecast-data-section {
-    /* Styling for the section that displays forecast data */
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    column-gap: 3rem;
-    height: 25vh;
-}
-
 .forecast-singular-data-section {
-    /* Styling for each singular data section within the forecast data section */
     display: flex;
-    margin-top: 1.5em;
     flex-direction: column;
-}
-.weatherContainer .value{
-    /* Styling for value elements within the weather container */
-    font-size: 30px;
-    padding-bottom:0.5em;
-}
-
-.weather-details-focus-area .forecast-singular-data-section{
-    /* Additional styles for forecast singular data sections within the weather details focus area */
-    
     justify-content: center;
-    text-align: center;
-}
-.weather-details-focus-area{
-    /* Styling for the weather details focus area, setting up a grid layout */
-    display: grid;
-    grid-template-columns: 100vw;
-    grid-template-rows: 30vh 60vh;
-    grid-template-areas: "widgets"
-                        "weather";
-    width: 100vw;
-    height: 90vh;
-    text-align: center;
-}
-
-.weather-details-section-container {
-    /* Container for the weather details sections */
-    display: flex;
-    flex-direction: column;
-    row-gap: 20px;
 }

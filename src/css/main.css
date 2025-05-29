@@ -1,5 +1,6 @@
-/* Main grid layout for various components */
-main {
+.mainPage {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
     display: flex;
     flex-direction: column;
     row-gap: 3rem;
@@ -42,52 +43,6 @@ main {
 	cursor: pointer;
 }
 
-
-/* Styles for arrow icons */
-.arrow{
-    height: 40%;
-    padding: 1em;
-}
-
-
-/* Styles for map text */
-.mapText {
-    color: #FFF;
-    text-align: center;
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    justify-content: center;
-    padding: 0.3em;
-
-}
-
-/* Styles for map legend */
-.mapLegend {
-	background: white;
-	padding: 1rem;
-	display: flex;
-	flex-flow: column;
-}
-
-/* Styles for map legend heading */
-.mapLegendHeading {
-	align-self: center;
-}
-
-/* Styles for individual legend fields */
-.mapLegendField {
-	display: flex;
-	align-items: center;
-	column-gap: 1rem;
-}
-
-/* Styles for icons in legend fields */
-.mapLegendField i {
-	width: 1vw;
-	height: 1vh;
-}
 
 /*Weather */
 
@@ -228,12 +183,20 @@ main {
 
 /* Styles for the advice widget */
 .weatherWidget {
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.30);
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: none;
+}
+
+.arrow {
+    font-size: 4rem;
+    cursor: pointer;
+    color: white;
 }
 
 /* Styles for advice text in advice widget */
@@ -248,4 +211,14 @@ main {
     font-style: normal;
     font-weight: 400;
     height:fit-content ;
+}
+
+
+
+
+.arrow, img {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }

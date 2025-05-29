@@ -54,23 +54,6 @@ const ChangeCentre: React.FC<ChangeCentreProps> = ({ latLangBounds }: ChangeCent
 };
 
 /**
- * @interface MapProps
- * @description Props for the Map component.
- * @property {number[][]} mapLineCoordinates - An array of [latitude, longitude] pairs for the polyline.
- * @property {number | null} startLat - Latitude of the starting point, or null.
- * @property {number | null} startLong - Longitude of the starting point, or null.
- * @property {number | null} endLat - Latitude of the destination point, or null.
- * @property {number | null} endLong - Longitude of the destination point, or null.
- */
-interface MapProps {
-    mapLineCoordinates: number[][];
-    startLat: number | null;
-    startLong: number | null;
-    endLat: number | null;
-    endLong: number | null;
-}
-
-/**
  * @function MapInitializer
  * @description A helper component to get the Leaflet map instance using useMap()
  * and pass it to a callback in the parent component.
@@ -86,19 +69,7 @@ const MapInitializer: React.FC<{ onMapReady: (map: L.Map) => void }> = ({ onMapR
 };
 
 
-/**
- * @function Map
- * @param {MapProps} props - The properties passed to the component.
- * @description Displays an interactive Leaflet map with an optional polyline,
- * start/end markers, and selectable weather overlay layers.
- */
-export const Map: React.FC<MapProps> = ({
-    mapLineCoordinates,
-    startLat,
-    startLong,
-    endLat,
-    endLong
-}: MapProps) => {
+export const Map: React.FC = () => {
     // State to hold the Leaflet map instance
     const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
     // State to hold the currently chosen weather layer
@@ -127,13 +98,13 @@ export const Map: React.FC<MapProps> = ({
     // Calculate default center coordinates for the map
     let defaultCentreLatLang: LatLngExpression = [55, -5]; // Default center for UK/Ireland area
 
-    if (startLat !== null && startLong !== null && endLat !== null && endLong !== null) {
-        defaultCentreLatLang = [(startLat + endLat) / 2, (startLong + endLong) / 2];
-    } else if (startLat !== null && startLong !== null) {
-        defaultCentreLatLang = [startLat, startLong];
-    } else if (endLat !== null && endLong !== null) {
-        defaultCentreLatLang = [endLat, endLong];
-    }
+    // if (startLat !== null && startLong !== null && endLat !== null && endLong !== null) {
+    //     defaultCentreLatLang = [(startLat + endLat) / 2, (startLong + endLong) / 2];
+    // } else if (startLat !== null && startLong !== null) {
+    //     defaultCentreLatLang = [startLat, startLong];
+    // } else if (endLat !== null && endLong !== null) {
+    //     defaultCentreLatLang = [endLat, endLong];
+    // }
 
     // Define the custom marker icon
     const defaultMarkerIcon = new Icon({
@@ -145,31 +116,31 @@ export const Map: React.FC<MapProps> = ({
     });
 
     // Marker for the starting point
-    const startingPointMarker = startLat !== null && startLong !== null ? (
-        <Marker position={[startLat, startLong]} icon={defaultMarkerIcon}>
-            <Popup>
-                Beginning
-            </Popup>
-        </Marker>
-    ) : null;
+    // const startingPointMarker = startLat !== null && startLong !== null ? (
+    //     <Marker position={[startLat, startLong]} icon={defaultMarkerIcon}>
+    //         <Popup>
+    //             Beginning
+    //         </Popup>
+    //     </Marker>
+    // ) : null;
 
-    // Marker for the destination point
-    const destinationMarker = endLat !== null && endLong !== null ? (
-        <Marker position={[endLat, endLong]} icon={defaultMarkerIcon}>
-            <Popup>
-                Destination
-            </Popup>
-        </Marker>
-    ) : null;
+    // // Marker for the destination point
+    // const destinationMarker = endLat !== null && endLong !== null ? (
+    //     <Marker position={[endLat, endLong]} icon={defaultMarkerIcon}>
+    //         <Popup>
+    //             Destination
+    //         </Popup>
+    //     </Marker>
+    // ) : null;
 
     // Determine the bounds for ChangeCentre component
-    let boundsToFit: LatLngBoundsExpression | LatLngExpression[];
-    if (startLat !== null && startLong !== null && endLat !== null && endLong !== null) {
-        boundsToFit = [[startLat, startLong], [endLat, endLong]];
-    } else {
-        // If only one point or no points, just center on the default or available point
-        boundsToFit = [defaultCentreLatLang];
-    }
+    // let boundsToFit: LatLngBoundsExpression | LatLngExpression[];
+    // if (startLat !== null && startLong !== null && endLat !== null && endLong !== null) {
+    //     boundsToFit = [[startLat, startLong], [endLat, endLong]];
+    // } else {
+    //     // If only one point or no points, just center on the default or available point
+    //     boundsToFit = [defaultCentreLatLang];
+    // }
 
 
     return (
@@ -200,19 +171,19 @@ export const Map: React.FC<MapProps> = ({
                 </LayersControl>
 
                 {/* Render Polyline if coordinates exist */}
-                {mapLineCoordinates.length > 0 && (
+                {/* {mapLineCoordinates.length > 0 && (
                     // Cast mapLineCoordinates to LatLngExpression[] to satisfy Polyline's positions prop
                     <Polyline positions={mapLineCoordinates as LatLngExpression[]} pathOptions={{ color: "black", opacity: 1 }} />
-                )}
+                )} */}
 
                 {/* Render Starting Point Marker */}
-                {startingPointMarker}
+                {/* {startingPointMarker} */}
 
                 {/* Render Destination Marker */}
-                {destinationMarker}
+                {/* {destinationMarker} */}
 
                 {/* Adjust map center/zoom based on available coordinates */}
-                <ChangeCentre latLangBounds={boundsToFit} />
+                {/* <ChangeCentre latLangBounds={boundsToFit} /> */}
             </MapContainer>
         </div>
     );

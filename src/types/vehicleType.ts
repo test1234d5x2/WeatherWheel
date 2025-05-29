@@ -1,3 +1,5 @@
-type VehicleType = "car" | "motorbike" | "van";
+interface VehicleType {
+    vehicle: "car" | "motorbike" | "van"
+}
 
 export default VehicleType
