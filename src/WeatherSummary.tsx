@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import getCurrentDate from "./utils/getCurrentDate";
-import { store } from "./store";
 import { selectCoordinates, selectPlaceName } from "./store/locationStore";
 import changeBackground from "./utils/changeBackground";
+import { useSelector } from "react-redux";
+import { EditableComponent } from "./EditableSection";
 
 
 const WeatherSummary: React.FC = () => {
@@ -10,8 +11,8 @@ const WeatherSummary: React.FC = () => {
     const [temperature, setTemp] = useState<string>('')
     const [weather, setWeather] = useState<string>('')
 
-    const lat = selectCoordinates(store.getState()).lat
-    const lng = selectCoordinates(store.getState()).lng
+    const lat = useSelector(selectCoordinates).lat
+    const lng = useSelector(selectCoordinates).lng
 
     // Fetch current weather data.
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`)
@@ -34,9 +35,9 @@ const WeatherSummary: React.FC = () => {
     }, [weather])
 
     return (
-        <div>
+        <div className="weatherSummaryContainer">
             <div className="locationText">
-                {selectPlaceName(store.getState())}
+                <EditableComponent />
             </div>
             <div className="dateText">
                 {getCurrentDate()}

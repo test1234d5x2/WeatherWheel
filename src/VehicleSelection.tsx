@@ -42,14 +42,12 @@ export const VehicleSelection: React.FC = () => {
     };
 
     return (
-        <div>
-            <div id="carousel" className="carousel">
-                <div className="carousel-images">
-                    <img alt="vehicle" className="carousel-image" src={Object.values(IMAGES_PATH)[slideIndex]} />
-                </div>
-                <button className="carousel-button prev" onClick={() => { moveSlide(-1); }}>&#10094;</button>
-                <button className="carousel-button next" onClick={() => { moveSlide(1); }}>&#10095;</button>
+        <div id="carousel" className="vehicleSelector">
+            <span className="arrow" onClickCapture={() => moveSlide(-1)}>&#8592;</span>
+            <div className="carousel-images">
+                <img alt="vehicle" className="carousel-image" src={Object.values(IMAGES_PATH)[slideIndex]} />
             </div>
+            <span className="arrow" onClick={() => moveSlide(1)}>&#8594;</span>
         </div>
     );
 };

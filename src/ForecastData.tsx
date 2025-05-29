@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { selectCoordinates } from "./store/locationStore";
-import { store } from "./store";
+import { useSelector } from "react-redux";
 
 interface ForecastDataPoint {
     timeText: string
@@ -11,8 +11,8 @@ interface ForecastDataPoint {
 
 
 const ForecastData: React.FC = () => {
-    const lat = selectCoordinates(store.getState()).lat
-    const lng = selectCoordinates(store.getState()).lng
+    const lat = useSelector(selectCoordinates).lat
+    const lng = useSelector(selectCoordinates).lng
 
     const [dataPoints, setDataPoints] = useState<ForecastDataPoint[]>([])
 

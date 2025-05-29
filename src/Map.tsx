@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, Popup, LayersControl, useMap } from 'react-leaflet';
 import { Icon, LatLngExpression, LatLngBoundsExpression } from "leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
+import { selectCoordinates } from "./store/locationStore";
+import { useSelector } from "react-redux";
 
 
 // Define the structure for the weather layer codes.
@@ -95,8 +97,9 @@ export const Map: React.FC = () => {
         setChosenWeatherLayer(event.name);
     }, []);
 
-    // Calculate default center coordinates for the map
-    let defaultCentreLatLang: LatLngExpression = [55, -5]; // Default center for UK/Ireland area
+    const lat = useSelector(selectCoordinates).lat
+    const lng = useSelector(selectCoordinates).lng
+    let defaultCentreLatLang: LatLngExpression = [lat, lng];
 
     // if (startLat !== null && startLong !== null && endLat !== null && endLong !== null) {
     //     defaultCentreLatLang = [(startLat + endLat) / 2, (startLong + endLong) / 2];
@@ -163,7 +166,7 @@ export const Map: React.FC = () => {
                                 url={`https://maps.openweathermap.org/maps/2.0/weather/${WEATHER_LAYER_CODES[weatherLayerKey]}/{z}/{x}/{y}?appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`}
                                 attribution="<a href='https://openweathermap.org/'>OpenWeather</a>"
                                 eventHandlers={{
-                                    add: () => handleWeatherLayerAdd({ name: weatherLayerKey }) // Pass the layer key to the handler
+                                    add: () => handleWeatherLayerAdd({ name: weatherLayerKey })
                                 }}
                             />
                         </LayersControl.BaseLayer>

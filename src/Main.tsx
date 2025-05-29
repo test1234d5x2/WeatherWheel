@@ -1,68 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { WeatherWarnings } from "./WeatherWarnings";
+import React from "react";
 import ForecastData from "./ForecastData";
 import { VehicleSelection } from "./VehicleSelection";
-import { EditableComponent } from "./EditableSection";
-import jsonDataWarning from "./weatherWarnings.json";
-import VehicleType from "./types/vehicleType";
-import { store } from "./store";
-import { useDispatch } from "react-redux";
-import { selectCoordinates, selectPlaceName, setMapLocation } from "./store/locationStore";
-import LocationState from "./types/locationState";
 import WeatherSummary from "./WeatherSummary";
 
 
 
-// From WeatherWarnings.tsx for weather alerts
-interface WeatherAPIAlert {
-    headline: string;
-    // Add other properties if they are part of your actual warning data.
-    // e.g., description: string; severity: string; ends_utc: string;
-}
-
-
-// From OpenRouteService API response for directions
-interface OpenRouteServiceResponse {
-    features?: {
-        geometry: {
-            coordinates: number[][];
-        };
-    }[];
-    error?: {
-        code: number;
-        message: string;
-    };
-}
-
-interface AdviceWarningsData {
-    [vehicleType: string]: AdviceWarningTexts[];
-}
-
-interface AdviceWarningTexts {
-    stormText: string[];
-    rainText: string[];
-    SnowText: string[];
-    windText: string[];
-    generalText: string[];
-}
-
-
 export const Main: React.FC = () => {
-    const [alerts, setAlerts] = useState<WeatherAPIAlert[] | null>(null);
-
-    const dispatch = useDispatch()
-
-
-    const updateLocationInfo = useCallback((lat: number, lng: number, name: string): void => {
-        const newLocation: LocationState = {
-            name: name,
-            coordinates: {lat, lng}
-        }
-        dispatch(setMapLocation(newLocation))
-    }, []);
-
-
-
     // TODO: Move to Weather Warnings now that we have Redux global state.
     // useEffect(() => {
     //     const name = selectPlaceName(store.getState())
@@ -86,7 +29,7 @@ export const Main: React.FC = () => {
     //     if (startLocation.lat !== null && startLocation.long !== null && endLocation.lat !== null && endLocation.long !== null) {
     //         fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${process.env.REACT_APP_OPEN_ROUTE_SECRVICES_API_KEY}&start=${startLocation.long},${startLocation.lat}&end=${endLocation.long},${endLocation.lat}`)
     //             .then(response => response.json())
-    //             .then((data: OpenRouteServiceResponse) => {
+    //             .then((data) => {
     //                 let coordinates: number[][] = [];
     //                 if (data.error !== undefined) {
     //                     // An error code usually means that the API cannot find a route because
@@ -126,12 +69,14 @@ export const Main: React.FC = () => {
                     <span className="arrow">&#8594;</span>
                 </section>
                 <section style={{display: "flex", columnGap: "2rem"}}>
-                    <section className="warningsWidget">
-                        <WeatherWarnings />
+                    <section className="adviceWidget">
+                        
                     </section>
                     <section className="vehicleWidget">
                         <span className="vehicleText">Vehicle</span>
-                        <VehicleSelection />
+                        <section className="vehicleSelector">
+                            <VehicleSelection />
+                        </section>
                     </section>
                 </section>
             </div>

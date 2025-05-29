@@ -6,11 +6,10 @@
     row-gap: 3rem;
 }
 
-.Weather div
+.weatherSummaryContainer
 {
     display: flex;
     flex-direction: column;
-    row-gap: 1rem;
 }
 
 .locationInput{
@@ -97,82 +96,24 @@
 }
 
 
-/*Warning Widget*/
-
-/* Styles for the warnings widget */
-.warningsWidget {
-    flex-shrink: 0;
-    border-radius: 50px;
-    background: rgba(255, 255, 255, 0.30);
-    flex: 1;
-    text-align: center;
-    padding: 0.5vw;
-    overflow: hidden;
-}
-
-/* Styles for warnings title */
-.warningsTitle {
-    color: #FCFCFC;
-    text-align: center;
-    
-    font-size: 1.4rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    width: 100%;
-    height: fit-content;
-}
-
-/* Styles for individual warnings */
-.warning{
-    display:flex;
-    padding:1.5em;
-    overflow: hidden;
-}
-
-/* Styles for warnings text */ 
-.warningsText {
-    width: 90%;
-    height: 100%;
-    flex-shrink: 0;
-    color: #FFF;
-    text-align: center;
-    
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    flex-wrap: wrap;
-}
-
-/* Styles for warnings symbols */
-.warningsSymbol {
-    width: 2vw;
-    height: 2vh;
-    flex-shrink: 0;
-    background: url("assets/warningSymbol.png"), lightgray 50% / cover no-repeat, lightgray 50% / cover no-repeat;
-    mix-blend-mode: screen;
-    padding-right: 0.5rem;
-}
-
 
 /*Vehicle Widget */
 
  /* Styles for the vehicle widget */
 .vehicleWidget {
-    grid-area:vehicle;
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.30);
     flex: 1;
     text-align: center;
     padding: 1em;
+
 }
 
 /* Styles for vehicle text in vehicle widget */
 .vehicleText {
     color: #FFF;
     text-align: center;
-    
+    flex: 1;
     font-size: 1.3rem;
     font-style: normal;
     font-weight: 700;
@@ -200,17 +141,15 @@
 }
 
 /* Styles for advice text in advice widget */
-.adviceText {
-    display: block; /* or 'flex' if you want the parent itself to be a flex container */
-    width: 100%; /* or any specific size */
-    height: auto;
-    flex-shrink: 0;
+.adviceWidget {
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.30);
     color: #FFF;
     text-align: center;
     font-size: 1.2rem;
     font-style: normal;
     font-weight: 400;
-    height:fit-content ;
+    flex: 1;
 }
 
 
@@ -221,4 +160,13 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+}
+
+
+
+.vehicleSelector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 5rem;
 }

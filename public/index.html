@@ -8,10 +8,113 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Weather Wheel: The Weather App For Drivers</title>
 </head>
+<style>
+    .raindrop-container {
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none; 
+        overflow-y: hidden;
+    }
+
+    canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        bottom: 100vh;
+        left: 0;
+        padding: 0;
+        margin: 0;
+        z-index: -1;
+        pointer-events: none;
+        transition-duration: 10s;
+    }
+</style>
 
 <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <div class="raindrop-container">
+        <canvas id="raindropCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('raindropCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const raindrops = [];
+        const numberOfRaindrops = 150;
+
+        function setCanvasDimensions() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Raindrop {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.length = Math.random() * 20 + 10; 
+                this.speed = Math.random() * 5 + 2; 
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+
+            // Method to draw the raindrop on the canvas
+            draw() {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(174, 194, 224, ${this.opacity})`;
+                ctx.lineWidth = 1; // Thin line for the raindrop
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x, this.y + this.length);
+                ctx.stroke();
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height) {
+                    this.y = -this.length; 
+                    this.x = Math.random() * canvas.width;
+                    this.speed = Math.random() * 5 + 2;
+                    this.opacity = Math.random() * 0.5 + 0.3
+                }
+            }
+        }
+
+        function initRaindrops() {
+            for (let i = 0; i < numberOfRaindrops; i++) {
+                raindrops.push(new Raindrop());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < raindrops.length; i++) {
+                raindrops[i].update();
+                raindrops[i].draw();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.onload = function() {
+            setCanvasDimensions();
+            initRaindrops();
+            animate();
+        };
+
+        window.onresize = function() {
+            setCanvasDimensions();
+            raindrops.length = 0;
+            initRaindrops();
+        };
+    </script>
 </body>
 
 </html>

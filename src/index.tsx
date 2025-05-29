@@ -15,6 +15,8 @@ import { store } from './store';
 const rootElement = document.getElementById('root') as HTMLElement;
 const root = ReactDOM.createRoot(rootElement);
 
+document.getElementsByTagName("canvas")[0].style.bottom = "0"
+
 root.render(
     <React.StrictMode>
         <Provider store={store}>

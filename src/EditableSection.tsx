@@ -1,4 +1,6 @@
-import React, { useState, useCallback, useEffect, JSX } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectPlaceName, setMapLocation } from "./store/locationStore";
 
 // Define the interface for a single geographical location object
 interface GeoLocationData {
@@ -9,20 +11,13 @@ interface GeoLocationData {
     state?: string; // 'state' is optional as it might not always be present
 }
 
-// Define the interface for the EditableComponent's props
-interface EditableComponentProps {
-    name: string | null; // The initial name/location to display, can be null
-    updateLocationInfo: (lat: number, long: number, name: string) => void; // Callback to update parent's location info
-}
 
-/**
- * @function EditableComponent
- * @param {EditableComponentProps} props - The properties passed to the component.
- * @description Allows the user to edit sections of text (representing a location),
- * search for potential locations via an API, and toggle their editability.
- */
-export const EditableComponent: React.FC<EditableComponentProps> = ({ name, updateLocationInfo }) => {
-    const [entryValue, setEntryValue] = useState<string>(name !== null ? name : "Location");
+
+export const EditableComponent: React.FC = () => {
+    const name = useSelector(selectPlaceName)
+    const dispatch = useDispatch()
+
+    const [entryValue, setEntryValue] = useState<string>(name);
     const [editable, setEditable] = useState<boolean>(false);
     const [selectable, setSelectable] = useState<boolean>(false);
     const [potentialLocations, setPotentialLocations] = useState<GeoLocationData[]>([]);
@@ -31,7 +26,7 @@ export const EditableComponent: React.FC<EditableComponentProps> = ({ name, upda
         if (name !== null) {
             setEntryValue(name);
         }
-    }, [name]); // Dependency array: re-run effect if 'name' prop changes
+    }, [name]); 
 
     /**
      * @function toggleEditableArea
@@ -84,35 +79,29 @@ export const EditableComponent: React.FC<EditableComponentProps> = ({ name, upda
         }
     }, [entryValue]); // Dependency: entryValue, as the fetch depends on it
 
-    /**
-     * @function updateEntryValue
-     * @param {string} value - The new value that updates the state.
-     * @description Updates the entry value in the state.
-     */
     const updateEntryValueHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>): void => {
         setEntryValue(event.target.value);
     }, []);
 
     // JSX for rendering the selectable locations list
-    let selectableLocations: JSX.Element;
+    let selectableLocations;
 
     if (potentialLocations.length === 0) {
         selectableLocations = (
-            <div className="loadingText">Loading...</div> // Or "No results found" if search returned empty
+            <div className="loadingText">Loading...</div>
         );
     } else {
         selectableLocations = (
             <>
                 {potentialLocations.map((item: GeoLocationData, index: number) => (
                     <span
-                        key={index} // Using index as key is acceptable here as the list is static and not reordered
+                        key={index}
                         onClick={() => {
-                            // Hide selectable area, toggle editable mode, and update parent's location info
                             setSelectable(false);
                             setEditable(false); // Toggle off editable mode after selection
                             // Construct the full location name
                             const fullName = `${item.name}, ${item.state ? item.state + ", " : ""}${item.country}`;
-                            updateLocationInfo(item.lat, item.lon, fullName);
+                            dispatch(setMapLocation({name: fullName, coordinates: {lat: item.lat, lng: item.lon}}))
                             setEntryValue(fullName); // Update the input field with the selected full name
                         }}
                     >
