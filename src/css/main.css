@@ -10,6 +10,7 @@
 {
     display: flex;
     flex-direction: column;
+    row-gap: 1rem;
 }
 
 .locationInput{
@@ -35,6 +36,12 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+    z-index: 1;
+}
+
+.selectable {
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 /* Styles for icons */
@@ -47,18 +54,16 @@
 
 /* Styles for the weather widget */
 .Weather{
-    flex: 3;
     text-align: center;
-    align-items: center;
-    justify-content: space-between;
     padding: 2vw;
 }
 
 /* Styles for location text in weather widget */
-.Weather .locationText {
+.Weather .locationText, input {
     color: #FFF;
     text-align: center;
-    
+    background-color: transparent;
+    border: none;
     font-size: 2.3rem;
     font-style: normal;
     font-weight: 700;
@@ -155,7 +160,7 @@
 
 
 
-.arrow, img {
+.arrow, img, input {
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -169,4 +174,11 @@
     align-items: center;
     justify-content: center;
     column-gap: 5rem;
+}
+
+
+
+input {
+    border: 1px solid white;
+    border-radius: 0.5rem;
 }

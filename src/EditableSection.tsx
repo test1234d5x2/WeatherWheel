@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPlaceName, setMapLocation } from "./store/locationStore";
 
-// Define the interface for a single geographical location object
 interface GeoLocationData {
     name: string;
     lat: number;
@@ -13,13 +12,19 @@ interface GeoLocationData {
 
 
 
-export const EditableComponent: React.FC = () => {
+interface EditableSectionProps {
+    editable: boolean
+    selectable: boolean
+    setEditable: (value: boolean) => void
+    setSelectable: (value: boolean) => void
+}
+
+
+export const EditableComponent: React.FC<EditableSectionProps> = ({editable, selectable, setEditable, setSelectable}: EditableSectionProps) => {
     const name = useSelector(selectPlaceName)
     const dispatch = useDispatch()
 
     const [entryValue, setEntryValue] = useState<string>(name);
-    const [editable, setEditable] = useState<boolean>(false);
-    const [selectable, setSelectable] = useState<boolean>(false);
     const [potentialLocations, setPotentialLocations] = useState<GeoLocationData[]>([]);
 
     useEffect(() => {
@@ -28,28 +33,20 @@ export const EditableComponent: React.FC = () => {
         }
     }, [name]); 
 
-    /**
-     * @function toggleEditableArea
-     * @description Toggles the editable state of the component.
-     * If switching from editable to non-editable, and the input is empty, it prevents the change.
-     */
-    const toggleEditableArea = useCallback((): void => {
-        // Check whether the user has actually entered something before toggling off editable mode
+
+    const toggleEditableArea = () => {
         if (editable === true && entryValue === "") {
-            // In a real application, you might show a user-friendly message here (e.g., a modal)
-            console.warn("Location entry cannot be empty.");
             return;
         }
-        setEditable(prevEditable => !prevEditable);
-        // When toggling editable, hide selectable area
-        setSelectable(false);
-    }, [editable, entryValue]);
+        closeEditableArea()
+    };
 
-    /**
-     * @function findPotentialLocations
-     * @description Fetches potential locations based on the entered value using OpenWeatherMap Geo API.
-     * Displays an alert if no valid locations are found.
-     */
+    const closeEditableArea = () => {
+        setEditable(!editable);
+        setSelectable(false);
+    }
+
+
     const findPotentialLocations = useCallback(async (): Promise<void> => {
         if (entryValue === "") {
             console.warn("Please enter a location to search.");
@@ -60,30 +57,26 @@ export const EditableComponent: React.FC = () => {
             const response = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(entryValue)}&limit=5&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`);
             const data: GeoLocationData[] = await response.json();
 
-            // Checks whether the user has entered a place that the API can find.
             if (data.length === 0) {
-                // Using console.error instead of window.alert for better UX in an immersive environment
                 console.error("This is not a valid location. Please enter something different.");
-                setPotentialLocations([]); // Clear previous potential locations
-                setSelectable(false); // Hide selectable area if no results
-                return;
+                setPotentialLocations([])
+                setSelectable(false)
+                return
             }
 
             setPotentialLocations(data);
-            // Once valid locations are found, display the selectable area.
             setSelectable(true);
         } catch (error) {
             console.error("Error fetching potential locations:", error);
-            setPotentialLocations([]); // Clear potential locations on error
-            setSelectable(false); // Hide selectable area on error
+            setPotentialLocations([]); 
+            setSelectable(false);
         }
-    }, [entryValue]); // Dependency: entryValue, as the fetch depends on it
+    }, [entryValue, setSelectable]);
 
     const updateEntryValueHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>): void => {
         setEntryValue(event.target.value);
     }, []);
 
-    // JSX for rendering the selectable locations list
     let selectableLocations;
 
     if (potentialLocations.length === 0) {
@@ -92,23 +85,22 @@ export const EditableComponent: React.FC = () => {
         );
     } else {
         selectableLocations = (
-            <>
+            <div>
                 {potentialLocations.map((item: GeoLocationData, index: number) => (
-                    <span
+                    <span className="selectable"
                         key={index}
                         onClick={() => {
-                            setSelectable(false);
-                            setEditable(false); // Toggle off editable mode after selection
-                            // Construct the full location name
                             const fullName = `${item.name}, ${item.state ? item.state + ", " : ""}${item.country}`;
                             dispatch(setMapLocation({name: fullName, coordinates: {lat: item.lat, lng: item.lon}}))
-                            setEntryValue(fullName); // Update the input field with the selected full name
+                            setEntryValue(fullName);
+                            setSelectable(false);
+                            setEditable(false);
                         }}
                     >
                         {item.name}, {item.state ? item.state + "," : ""} {item.country}
                     </span>
                 ))}
-            </>
+            </div>
         );
     }
 
@@ -126,12 +118,16 @@ export const EditableComponent: React.FC = () => {
                                 }
                             }}
                         /> :
-                        <span>{name !== null ? name : "Location"}</span>
+                        <span>{name}</span>
                 }
 
                 {
                     editable === true ?
-                        <span className='material-symbols-outlined icon' onClick={findPotentialLocations}>search</span> :
+                        <div>
+                            <span className='material-symbols-outlined icon' onClick={findPotentialLocations}>search</span>
+                            <span className='material-symbols-outlined icon' onClick={() => {closeEditableArea()}}>close</span>
+                        </div>
+                        :
                         <span className='material-symbols-outlined icon' onClick={toggleEditableArea}>edit</span>
                 }
             </div>
