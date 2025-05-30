@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import getCurrentDate from "./utils/getCurrentDate";
 import { selectCoordinates } from "./store/locationStore";
 import changeBackground from "./utils/changeBackground";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { EditableComponent } from "./EditableSection";
 import isRaining from "./utils/isRaining";
+import { selectTemperature, selectWeather, setWeather } from "./store/weatherStore";
 
 
 const WeatherSummary: React.FC = () => {
+    const dispatch = useDispatch()
 
-    const [temperature, setTemp] = useState<string>('')
-    const [weather, setWeather] = useState<string>('')
+    const temperature = useSelector(selectTemperature)
+    const weather = useSelector(selectWeather)
+
     const [editable, setEditable] = useState<boolean>(false);
     const [selectable, setSelectable] = useState<boolean>(false);
 
@@ -22,8 +25,12 @@ const WeatherSummary: React.FC = () => {
         .then(response => response.json())
         .then((data) => {
             if (Object.keys(data).includes("cod") && data['cod'] === 200) {
-                setTemp(`${Math.round(data.main.temp - 273.15)}`)
-                setWeather(data.weather[0].main)
+                dispatch(setWeather({
+                    temperature: Math.round(data.main.temp - 273.15),
+                    weather: data.weather[0].main,
+                    visibility: data.visibility,
+                    windSpeed: data.wind.speed
+                }))
 
 
             } else {

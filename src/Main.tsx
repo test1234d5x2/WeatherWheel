@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ForecastData from "./ForecastData";
 import { VehicleSelection } from "./VehicleSelection";
 import WeatherSummary from "./WeatherSummary";
+import Advice from "./Advice";
+
 
 
 
@@ -55,7 +57,6 @@ export const Main: React.FC = () => {
     //     }
     // }, [startLocation.lat, startLocation.long, endLocation.lat, endLocation.long]); // Dependencies: all coordinates
 
-
     return (
         <main>
             <div className="mainPage">
@@ -70,7 +71,7 @@ export const Main: React.FC = () => {
                 </section>
                 <section style={{display: "flex", columnGap: "2rem"}}>
                     <section className="adviceWidget">
-                        
+                        <Advice />
                     </section>
                     <section className="vehicleWidget">
                         <span className="vehicleText">Vehicle</span>
