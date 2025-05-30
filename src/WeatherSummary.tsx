@@ -70,6 +70,12 @@ const WeatherSummary: React.FC = () => {
                     {weather}
                 </div>: ''
             }
+            {
+                !editable ? 
+                <div>
+                    <strong><a href="map">View Map</a></strong>
+                </div>: ""
+            }
         </div>
     )
 }

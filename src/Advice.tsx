@@ -18,17 +18,29 @@ const Advice: React.FC = () => {
     useEffect(() => {
         if (!initial) {
             generateAdvice(generatePrompt(temp, weather, visibility, windSpeed, { vehicle })).then((advice: string) => {
-                setAdvice(advice)
+                setAdvice(advice.trim())
             }).catch((err: Error) => {
                 console.log(err)
             })
         }
     }, [temp, weather, visibility, windSpeed, vehicle])
 
+    let shownElements = advice.split("\n").map((text: string) => {
+        if (text !== "\\" && text.trim().length > 0) {
+            return (
+                <div className="adviceText">
+                    {text}
+                </div>
+            )
+        }
+    })
+
     return (
-        <div>
-            {advice}
-        </div>
+        <React.Fragment>
+            <div className="adviceSection">
+                {shownElements}
+            </div>
+        </React.Fragment>
     )
 }
 

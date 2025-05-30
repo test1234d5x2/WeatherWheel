@@ -117,17 +117,15 @@
 }
 
 /* Styles for vehicle text in vehicle widget */
-.vehicleText {
+.vehicleText, .adviceTitle {
     color: #FFF;
     text-align: center;
-    flex: 1;
     font-size: 1.3rem;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
 }
 
-/*Advice Widget */
 
 /* Styles for the advice widget */
 .weatherWidget {
@@ -152,11 +150,22 @@
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.30);
     color: #FFF;
-    text-align: center;
     font-size: 1.2rem;
     font-style: normal;
     font-weight: 400;
     flex: 1;
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    row-gap: 1rem;
+}
+
+.adviceSection {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    row-gap: 1rem;
 }
 
 
@@ -183,4 +192,14 @@
 input {
     border: 1px solid white;
     border-radius: 0.5rem;
+}
+
+.mapSection {
+    display: flex;
+    justify-content: center;
+}
+
+a {
+    color: white;
+    
 }

@@ -61,7 +61,6 @@ export const Main: React.FC = () => {
         <main>
             <div className="mainPage">
                 <section className="Weather">
-                    <a href="map">Map</a>
                     <WeatherSummary />
                 </section>
                 <section className="weatherWidget">
@@ -71,6 +70,7 @@ export const Main: React.FC = () => {
                 </section>
                 <section style={{display: "flex", columnGap: "2rem"}}>
                     <section className="adviceWidget">
+                        <div className="adviceTitle">Driving Advice</div>
                         <Advice />
                     </section>
                     <section className="vehicleWidget">
@@ -81,7 +81,6 @@ export const Main: React.FC = () => {
                     </section>
                 </section>
             </div>
-            
         </main>
     );
 };
