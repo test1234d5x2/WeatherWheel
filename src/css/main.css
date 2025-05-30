@@ -32,11 +32,13 @@
 }
 /* Styles for selectable areas */
 .selectableArea {
+    margin: 0.25rem;
 	display: flex;
-	flex-direction: column;
+	flex-flow: column;
 	align-items: center;
 	justify-content: center;
     z-index: 1;
+    row-gap: 0.25rem;
 }
 
 .selectable {

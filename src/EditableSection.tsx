@@ -85,7 +85,7 @@ export const EditableComponent: React.FC<EditableSectionProps> = ({editable, sel
         );
     } else {
         selectableLocations = (
-            <div>
+            <React.Fragment>
                 {potentialLocations.map((item: GeoLocationData, index: number) => (
                     <span className="selectable"
                         key={index}
@@ -100,7 +100,7 @@ export const EditableComponent: React.FC<EditableSectionProps> = ({editable, sel
                         {item.name}, {item.state ? item.state + "," : ""} {item.country}
                     </span>
                 ))}
-            </div>
+            </React.Fragment>
         );
     }
 
