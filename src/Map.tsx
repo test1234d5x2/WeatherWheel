@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, Popup, LayersControl, useMap } from 'react-leaflet';
 import { Icon, LatLngExpression, LatLngBoundsExpression } from "leaflet";
-import icon from 'leaflet/dist/images/marker-icon.png';
+import standardIcon from './css/assets/marker-icon-standard.png';
+import startIcon from './css/assets/marker-icon-start.png'
+import destinationIcon from './css/assets/marker-icon-destination.png'
 import { selectCoordinates } from "./store/locationStore";
 import { useSelector } from "react-redux";
 
@@ -11,7 +13,12 @@ const WEATHER_LAYER_CODES: { [key: string]: string } = {
     "Temperature": "TA2",
     "Rain": "PA0",
     "Clouds": "CL",
+    "Wind": "WS10",
+    "Snow": "SD0",
+    "Pressure": "APM"
 };
+
+
 
 /**
  * @interface ChangeCentreProps
@@ -109,14 +116,31 @@ export const Map: React.FC = () => {
     //     defaultCentreLatLang = [endLat, endLong];
     // }
 
-    // Define the custom marker icon
+
     const defaultMarkerIcon = new Icon({
-        iconUrl: icon,
+        iconUrl: standardIcon,
         iconSize: [25, 41],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
     });
+
+    const startMarkerIcon = new Icon({
+        iconUrl: startIcon,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    const destinationMarkerIcon = new Icon({
+        iconUrl: destinationIcon,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
 
     // Marker for the starting point
     // const startingPointMarker = startLat !== null && startLong !== null ? (
@@ -159,7 +183,7 @@ export const Map: React.FC = () => {
                 />
 
                 {/* LayersControl for weather overlays */}
-                <LayersControl position="topright">
+                <LayersControl position="topright" sortLayers>
                     {Object.keys(WEATHER_LAYER_CODES).map((weatherLayerKey) => (
                         <LayersControl.BaseLayer name={weatherLayerKey} key={weatherLayerKey}>
                             <TileLayer
