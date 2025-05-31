@@ -1,0 +1,34 @@
+.mapLegendContainer {
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    z-index: 1000;
+    background-color: white;
+    padding: 1rem;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    column-gap: 0.25rem;
+}
+
+
+.colourBox {
+    width: 10px;
+    height: 10px;
+}
+
+
+.city-label {
+    background-color: black;
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    pointer-events: auto;
+    cursor: pointer;
+    width: unset !important;
+    height: unset !important;
+}

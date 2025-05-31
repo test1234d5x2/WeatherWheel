@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { EditableComponent } from "./EditableSection";
 import isRaining from "./utils/isRaining";
 import { selectTemperature, selectWeather, setWeather } from "./store/weatherStore";
+import { Link } from "react-router-dom";
 
 
 const WeatherSummary: React.FC = () => {
@@ -73,7 +74,7 @@ const WeatherSummary: React.FC = () => {
             {
                 !editable ? 
                 <div>
-                    <strong><a href="map">View Map</a></strong>
+                    <strong><Link to="/map">View Map</Link></strong>
                 </div>: ""
             }
         </div>

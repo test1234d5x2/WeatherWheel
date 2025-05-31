@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import 'leaflet/dist/leaflet.css';
 import './css/main.css';
 import './css/index.css';
 import './css/forecast.css';
 import './css/recommendations.css';
 import './css/carousel.css';
-import 'leaflet/dist/leaflet.css';
+import './css/map.css'
 import { Container } from './Container';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
