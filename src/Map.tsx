@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, Popup, LayersControl, useMap, useMapEvents } from 'react-leaflet';
 import { Icon, LatLngExpression, LatLngBoundsExpression } from "leaflet";
 import standardIcon from './css/assets/marker-icon-standard.png';
@@ -8,31 +8,13 @@ import { selectCoordinates, selectPlaceName } from "./store/locationStore";
 import { useSelector } from "react-redux";
 import createCityLabel from "./utils/createLabel";
 import cities from './data/capital_cities.json'
+import CityWeatherDetails from "./types/cityWeatherDetails";
+import WEATHER_LAYER_CODES from "./constants/weatherLayerCodes";
+import getCorrectValue from "./utils/getCorrectValue";
+import LegendItemKey, { WEATHER_LAYER_LEGENDS } from "./constants/weatherLayerLegendItems";
+import changeBackground from "./utils/changeBackground";
+import { selectWeather } from "./store/weatherStore";
 
-// TODO: Remove city labels when zooming out based on the significance of the population value. Code is half implemented.
-
-
-interface CityDetails {
-    name: string
-    population: number
-    lat: number
-    lng: number
-}
-
-
-interface CityWeatherDetails extends CityDetails {
-    temperature: number
-    clouds: number
-    rain: number
-    snow: number
-    wind: number
-    pressure: number
-}
-
-interface LegendItemKey {
-    hexCode: string
-    value: string
-}
 
 const LegendItem: React.FC<LegendItemKey> = ({ hexCode, value }: LegendItemKey) => {
     return (
@@ -43,90 +25,18 @@ const LegendItem: React.FC<LegendItemKey> = ({ hexCode, value }: LegendItemKey) 
     )
 }
 
-// Define the structure for the weather layer codes.
-const WEATHER_LAYER_CODES: { [key: string]: string } = {
-    "Temperature": "TA2",
-    "Rain": "PA0",
-    "Clouds": "CL",
-    "Wind": "WS10",
-    "Snow": "SD0",
-    "Pressure": "APM"
-};
 
-
-const WEATHER_LAYER_LEGENDS: { [key: string]: LegendItemKey[] } = {
-    "Temperature": [
-        { hexCode: "821692", value: "-40°C" },
-        { hexCode: "8257DB", value: "-30°C" },
-        { hexCode: "208CEC", value: "-20°C" },
-        { hexCode: "20C4E8", value: "-10°C" },
-        { hexCode: "23DDDD", value: "0°C" },
-        { hexCode: "C2FF28", value: "10°C" },
-        { hexCode: "FFF028", value: "20°C" },
-        { hexCode: "FFC228", value: "25°C" },
-        { hexCode: "FC8014", value: "30°C" }
-    ],
-    "Rain": [
-        { hexCode: "7878BE19", value: "0.5mm" },
-        { hexCode: "6E6ECD33", value: "1mm" },
-        { hexCode: "5050E1B2", value: "10mm" },
-        { hexCode: "1414FFE5", value: "140mm" }
-    ],
-    "Clouds": [
-        { hexCode: "F7F7FF66", value: "50%" },
-        { hexCode: "F6F5FF8C", value: "60%" },
-        { hexCode: "F4F4FFBF", value: "70%" },
-        { hexCode: "E9E9DFCC", value: "80%" },
-        { hexCode: "DEDEDED8", value: "90%" },
-        { hexCode: "D2D2D2FF", value: "100%" },
-        { hexCode: "D2D2D2FF", value: "200%" }
-    ],
-    "Wind": [
-        { hexCode: "EECECC66", value: "5m/s" },
-        { hexCode: "B364BCB3", value: "15m/s" },
-        { hexCode: "3F213BCC", value: "25m/s" },
-        { hexCode: "744CACE6", value: "50m/s" },
-        { hexCode: "4600AFFF", value: "100m/s" },
-        { hexCode: "0D1126FF", value: "200m/s" }
-    ],
-    "Snow": [
-        { hexCode: "EDEDED", value: "0.05m" },
-        { hexCode: "D9F0F4", value: "0.1m" },
-        { hexCode: "A5E5EF", value: "0.2m" },
-        { hexCode: "7DDEED", value: "0.3m" },
-        { hexCode: "35D2EA", value: "0.4m" },
-        { hexCode: "00CCE8", value: "0.5m" },
-        { hexCode: "706DCE", value: "0.6m" },
-        { hexCode: "514FCC", value: "0.7m" },
-        { hexCode: "3333CC", value: "0.8m" },
-        { hexCode: "1818CC", value: "0.9m" },
-        { hexCode: "C454B7", value: "1.2m" },
-        { hexCode: "C12CB0", value: "1.5m" },
-        { hexCode: "BF00A8", value: "1.8m" },
-        { hexCode: "85408C", value: "2.5m" },
-        { hexCode: "7F2389", value: "3.0m" },
-        { hexCode: "790087", value: "4.0m" },
-        { hexCode: "E80068", value: "15m" }
-    ],
-    "Pressure": [
-        { hexCode: "0073FF", value: "94000hPa" },
-        { hexCode: "00AAFF", value: "96000hPa" },
-        { hexCode: "4BD0D6", value: "98000hPa" },
-        { hexCode: "8DE7C7", value: "100000hPa" },
-        { hexCode: "B0F720", value: "101000hPa" },
-        { hexCode: "F0B800", value: "102000hPa" },
-        { hexCode: "FB5515", value: "104000hPa" },
-        { hexCode: "F3363B", value: "106000hPa" },
-        { hexCode: "C60000", value: "108000hPa" }
-    ]
-}
+const WORLD_BOUNDS = [
+    [-90, -210],
+    [90, 210]
+] as LatLngBoundsExpression
 
 
 const MapInitializer: React.FC<{ onMapReady: (map: L.Map) => void }> = ({ onMapReady }) => {
     const map = useMap()
     useEffect(() => {
         onMapReady(map);
-    }, [map, onMapReady]);
+    }, [map]);
     return null;
 };
 
@@ -134,17 +44,51 @@ const MapInitializer: React.FC<{ onMapReady: (map: L.Map) => void }> = ({ onMapR
 export const Map: React.FC = () => {
     const [mapInstance, setMapInstance] = useState<L.Map | null>(null)
     const [chosenWeatherLayer, setChosenWeatherLayer] = useState<string | null>(null)
-    const [allCities, setAllCities] = useState<CityDetails[]>([])
+    const [allCities, setAllCities] = useState<CityWeatherDetails[]>([])
+    const [visibleCities, setVisibleCities] = useState<CityWeatherDetails[]>([])
     const [currentZoom, setCurrentZoom] = useState<number>(5)
+    const [showDetailedInfo, setShowDetailedInfo] = useState<boolean>(false)
+    const [leftPanelWidth, setLeftPanelWidth] = useState<number>(window.innerWidth * 0.25);
+    const [isResizing, setIsResizing] = useState<boolean>(false);
 
 
-    const handleMapInstanceReady = useCallback((map: L.Map) => {
+    const leftPanel = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const handleMouseMoveResize = (e: MouseEvent) => {
+            if (isResizing) {
+                const newWidth = e.clientX
+                setLeftPanelWidth(Math.max(window.innerWidth * 0.25, Math.min(window.innerWidth * 0.75, newWidth)))
+            }
+        };
+
+        const handleMouseUp = () => {
+            setIsResizing(false);
+        };
+
+        if (isResizing) {
+            window.addEventListener('mousemove', handleMouseMoveResize as unknown as EventListener);
+            window.addEventListener('mouseup', handleMouseUp);
+        }
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMoveResize as unknown as EventListener);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isResizing]);
+
+    const handleMouseDownResizer = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsResizing(true);
+    };
+
+    const handleMapInstanceReady = (map: L.Map) => {
         setMapInstance(map);
-    }, []);
+    }
 
-    const handleWeatherLayerAdd = useCallback((event: { name: string }) => {
+    const handleWeatherLayerAdd = (event: { name: string }) => {
         setChosenWeatherLayer(event.name);
-    }, []);
+    }
 
     const chosenPlace = useSelector(selectPlaceName)
     const lat = useSelector(selectCoordinates).lat
@@ -186,21 +130,45 @@ export const Map: React.FC = () => {
 
 
     useEffect(() => {
-        const fetchCountries = async () => {
-            const cityDetailsList: CityDetails[] = cities.map((city) => {
-                return {
+        const fetchData = async () => {
+            const cityDetailsList: CityWeatherDetails[] = []
+
+            for (let city of cities) {
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${city.lat}&lon=${city.lon}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`)
+                const data = await response.json()
+                const weatherDetails: CityWeatherDetails = {
+                    id: city.id,
                     name: city.name,
                     population: city.population,
                     lat: city.lat,
-                    lng: city.lon
+                    lng: city.lon,
+                    temperature: `${Math.round(data.main.temp - 273.15)}°C`,
+                    clouds: `${data.clouds.all}%`,
+                    rain: Object.keys(data).find((keys) => keys === "rain") ? `${data.rain['1h']}mm/h` : "0mm/h",
+                    snow: Object.keys(data).find((keys) => keys === "snow") ? `${data.snow['1h']}mm/h` : "0mm/h",
+                    wind: `${data.wind.speed}m/s`,
+                    pressure: `${data.main.pressure}hPa`
                 }
-            })
 
-            setAllCities(cityDetailsList)
+                if (city.population >= 3000000) {
+                    cityDetailsList.push(weatherDetails)
+                    setAllCities(cityDetailsList)
+                }
+            }
         }
 
-        fetchCountries()
+        fetchData()
     }, [])
+
+    useEffect(() => {
+        if (currentZoom < 4) {
+            setVisibleCities([])
+        }
+        else {
+            setVisibleCities(allCities)
+        }
+
+    }, [currentZoom])
 
 
     const chosenWeatherPlaceMarker = (
@@ -211,7 +179,7 @@ export const Map: React.FC = () => {
         </Marker>
     )
 
-
+    const backgroundStyle = changeBackground(useSelector(selectWeather))
 
     // Marker for the starting point
     // const startingPointMarker = startLat !== null && startLong !== null ? (
@@ -231,19 +199,10 @@ export const Map: React.FC = () => {
     //     </Marker>
     // ) : null;
 
-    // Determine the bounds for ChangeCentre component
-    // let boundsToFit: LatLngBoundsExpression | LatLngExpression[];
-    // if (startLat !== null && startLong !== null && endLat !== null && endLong !== null) {
-    //     boundsToFit = [[startLat, startLong], [endLat, endLong]];
-    // } else {
-    //     // If only one point or no points, just center on the default or available point
-    //     boundsToFit = [defaultCentreLatLang];
-    // }
 
-    
     return (
         <div style={{ width: "100vw", height: "100vh" }}>
-            <MapContainer center={defaultCentreLatLang} zoom={currentZoom} style={{ height: '100%', width: "100%" }}>
+            <MapContainer center={defaultCentreLatLang} zoom={currentZoom} minZoom={3} style={{ height: '100%', width: "100%" }} worldCopyJump={false} maxBoundsViscosity={1.0} maxBounds={WORLD_BOUNDS}>
                 <MapInitializer onMapReady={handleMapInstanceReady} />
 
                 <MapEventsHandler setZoom={setCurrentZoom} />
@@ -277,24 +236,44 @@ export const Map: React.FC = () => {
                 {/* {destinationMarker} */}
 
                 {
-                    chosenWeatherLayer && currentZoom > 4 ? allCities.map((cityDetails: CityDetails) => {
+                    chosenWeatherLayer ? visibleCities.map((cityDetails: CityWeatherDetails) => {
                         return (
-                            <Marker key={cityDetails.name} position={[cityDetails.lat, cityDetails.lng]} icon={createCityLabel(cityDetails.name)}>
-                                <Popup>
-                                    {cityDetails.name}
-                                </Popup>
+                            <Marker
+                                key={cityDetails.id}
+                                position={[cityDetails.lat, cityDetails.lng]}
+                                icon={createCityLabel(cityDetails.name, getCorrectValue(chosenWeatherLayer.toLowerCase(), cityDetails))}
+                                eventHandlers={{
+                                    click: (event) => setShowDetailedInfo(true)
+                                }}
+                            >
+
                             </Marker>
                         )
                     }) : ""
                 }
 
                 {
-                    chosenWeatherLayer ? 
-                    <div className="mapLegendContainer">
-                        {WEATHER_LAYER_LEGENDS[chosenWeatherLayer].map((item: LegendItemKey) => <LegendItem hexCode={item.hexCode} value={item.value} />)}
-                    </div>: ''
+                    chosenWeatherLayer ?
+                        <div className="mapLegendContainer">
+                            {WEATHER_LAYER_LEGENDS[chosenWeatherLayer].map((item: LegendItemKey) => <LegendItem hexCode={item.hexCode} value={item.value} />)}
+                        </div> : ''
                 }
+
+
             </MapContainer>
+
+            {
+                showDetailedInfo ?
+                    <section className="side-panel" style={{ width: `${leftPanelWidth}px`, backgroundImage: backgroundStyle }} ref={leftPanel}>
+                        <div className="detailed-city-info-section-container">
+                            <div className="detailed-city-info-section">
+                                <div className="material-symbols-outlined icon close-icon" onClick={() => setShowDetailedInfo(false)}>close</div>
+                            </div>
+                        </div>
+                        <div className="draggable-section" onMouseDown={handleMouseDownResizer}></div>
+                    </section> : ''
+            }
+
 
         </div>
     );
@@ -302,11 +281,9 @@ export const Map: React.FC = () => {
 
 
 
-
-
 // Routing For Later Implementation
 
-// TODO: Move the whole function below to the map.
+// TODO: IMPLEMENT
 // useEffect(() => {
 //     if (startLocation.lat !== null && startLocation.long !== null && endLocation.lat !== null && endLocation.long !== null) {
 //         fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${process.env.REACT_APP_OPEN_ROUTE_SECRVICES_API_KEY}&start=${startLocation.long},${startLocation.lat}&end=${endLocation.long},${endLocation.lat}`)

@@ -31,4 +31,34 @@
     cursor: pointer;
     width: unset !important;
     height: unset !important;
+    padding: 0.125rem;
+    display: flex;
+    column-gap: 0.5rem;
+}
+
+.side-panel {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1000;
+    background-color: white;
+}
+
+.detailed-city-info-section-container {
+    flex: 99;
+    overflow-x: scroll;
+}
+
+.close-icon {
+    margin: 0.5rem;
+}
+
+.draggable-section {
+    flex: 1;
+    min-width: 10px;
+    height: 100vh;
+    background-color: black;
+    cursor: ew-resize;
 }
