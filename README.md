@@ -1,11 +1,14 @@
-<h1> GUI Weather App </h1>
+<h1> WeatherWheel </h1>
 
-<h2> Installation Instructions </h2>
+<h2>Main Page</h2>
+![Main Page](./MainPage.png)
 
-This is assuming that nodejs is already installed.
+<h2>Rain Animation</h2>
+![Rain Animation](./RainAnimation.png)
 
-cd into the directory containing the package.json file and then run:
+<h2>Map Full View</h2>
+![Map Full View](./MapFullView.png)
 
-<code> $ npm install  </code>
+<h2>Side By Side</h2>
+![Side By Side](./sideBySide.png)
 
-<code> $ npm start </code>
