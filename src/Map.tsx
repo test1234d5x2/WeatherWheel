@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Polyline, Marker, Popup, LayersControl, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, Marker, LayersControl, useMap, useMapEvents } from 'react-leaflet';
 import { Icon, LatLngExpression, LatLngBoundsExpression, latLng, LatLng } from "leaflet";
 import standardIcon from './css/assets/marker-icon-standard.png';
 import startIcon from './css/assets/marker-icon-start.png'
 import destinationIcon from './css/assets/marker-icon-destination.png'
-import { selectCoordinates, selectPlaceName, setMapLocation } from "./store/locationStore";
+import { selectCoordinates, setMapLocation } from "./store/locationStore";
 import { useDispatch, useSelector } from "react-redux";
 import createCityLabel from "./utils/createLabel";
 import cities from './data/capital_cities.json'
@@ -37,14 +37,14 @@ const MapInitializer: React.FC<{ onMapReady: (map: L.Map) => void }> = ({ onMapR
     const map = useMap()
     useEffect(() => {
         onMapReady(map);
-    }, [map]);
+    }, [map, onMapReady]);
     return null;
 };
 
 
 export const Map: React.FC = () => {
     const dispatch = useDispatch()
-    const [mapInstance, setMapInstance] = useState<L.Map | null>(null)
+    const [, setMapInstance] = useState<L.Map | null>(null)
     const [mapLineCoordinates, setMapLineCoordinates] = useState<LatLng[]>()
     const [chosenWeatherLayer, setChosenWeatherLayer] = useState<string | null>(null)
     const [allCities, setAllCities] = useState<CityWeatherDetails[]>([])
@@ -124,7 +124,6 @@ export const Map: React.FC = () => {
         setChosenWeatherLayer(event.name);
     }
 
-    const chosenPlace = useSelector(selectPlaceName)
     const lat = useSelector(selectCoordinates).lat
     const lng = useSelector(selectCoordinates).lng
     let defaultCentreLatLang: LatLngExpression = [lat, lng];
@@ -194,7 +193,7 @@ export const Map: React.FC = () => {
             setVisibleCities(allCities)
         }
 
-    }, [currentZoom])
+    }, [currentZoom, allCities])
 
 
     const chosenWeatherPlaceMarker = <Marker position={defaultCentreLatLang} icon={defaultMarkerIcon} />

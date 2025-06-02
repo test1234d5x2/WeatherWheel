@@ -80,6 +80,13 @@
 }
 
 
+.leaflet-control-layers-base label span {
+    display: flex;
+    align-items: center;
+    column-gap: 0.25rem;
+}
+
+
 
 @media screen and (max-width: 650px) {
     .side-panel {
