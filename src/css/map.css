@@ -2,7 +2,6 @@
     display: flex;
     width: 100vw;
     height: 100vh;
-    overflow-x: scroll;
 }
 
 .mapLegendContainer {
@@ -52,14 +51,13 @@
 }
 
 .detailed-city-info-section-container {
-    overflow-x: scroll;
+    overflow-x: hidden;
 }
 
 .detailed-city-info-section {
     display: flex;
     flex-direction: column;
     row-gap: 2rem;
-    overflow-x: scroll;
     text-align: center;
 }
 
