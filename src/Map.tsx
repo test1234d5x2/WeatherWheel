@@ -57,7 +57,7 @@ export const Map: React.FC = () => {
     const [destinationCoordinates, setDestinationCoordinates] = useState<LatLng>()
 
 
-
+    // Dealing with the routing service API.
     useEffect(() => {
         if (startCoordinates && destinationCoordinates ) {
             fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${process.env.REACT_APP_OPEN_ROUTE_SECRVICES_API_KEY}&start=${startCoordinates.lng},${startCoordinates.lat}&end=${destinationCoordinates.lng},${destinationCoordinates.lat}`)
@@ -86,6 +86,7 @@ export const Map: React.FC = () => {
     }, [startCoordinates, destinationCoordinates]);
 
 
+    // Dealing with the resizable feature of the left panel.
     const leftPanel = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -124,36 +125,8 @@ export const Map: React.FC = () => {
         setChosenWeatherLayer(event.name);
     }
 
-    const lat = useSelector(selectCoordinates).lat
-    const lng = useSelector(selectCoordinates).lng
-    let defaultCentreLatLang: LatLngExpression = [lat, lng];
 
-
-    const defaultMarkerIcon = new Icon({
-        iconUrl: standardIcon,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-
-    const startMarkerIcon = new Icon({
-        iconUrl: startIcon,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-
-    const destinationMarkerIcon = new Icon({
-        iconUrl: destinationIcon,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-
-
+    // Deaing with getting the weather data for all the labels for each city.
     useEffect(() => {
         const fetchData = async () => {
             const cityDetailsList: CityWeatherDetails[] = []
@@ -196,13 +169,45 @@ export const Map: React.FC = () => {
     }, [currentZoom, allCities])
 
 
+    // Dealing with the markers.
+    const defaultMarkerIcon = new Icon({
+        iconUrl: standardIcon,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    const startMarkerIcon = new Icon({
+        iconUrl: startIcon,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    const destinationMarkerIcon = new Icon({
+        iconUrl: destinationIcon,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    const lat = useSelector(selectCoordinates).lat
+    const lng = useSelector(selectCoordinates).lng
+    let defaultCentreLatLang: LatLngExpression = [lat, lng];
     const chosenWeatherPlaceMarker = <Marker position={defaultCentreLatLang} icon={defaultMarkerIcon} />
     const startingPointMarker = startCoordinates ? <Marker position={startCoordinates} icon={startMarkerIcon} /> : ""
     const destinationMarker = destinationCoordinates ? <Marker position={destinationCoordinates} icon={destinationMarkerIcon} /> : ""
 
+    // Dealing with the content of the left panel.
     const backgroundStyle = changeBackground(useSelector(selectWeather))
-
     const chosenCity = useSelector(selectCoordinates)
+
+
+    
+
 
     return (
         <div className="map-container">
