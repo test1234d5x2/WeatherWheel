@@ -17,7 +17,6 @@ def convert_csv_to_json(
         with open(csv_filepath, mode='r', encoding='utf-8') as csv_file:
             csv_reader = csv.DictReader(csv_file)
 
-            # This check will now specifically look for your provided headers
             required_columns = ["city", "lat", "lng", "country", "iso2", "population", "capital"]
             if not all(col in csv_reader.fieldnames for col in required_columns):
                 print("Error: Missing one or more required columns in CSV.")
@@ -26,7 +25,6 @@ def convert_csv_to_json(
                 return
 
             for row in csv_reader:
-                # Filter for primary capitals if requested
                 if filter_capitals_only and row.get('capital') != 'primary':
                     continue
 
@@ -36,9 +34,9 @@ def convert_csv_to_json(
                     "lon": float(row.get('lng', 0.0)),
                     "country": row.get('country'),
                     "iso2": row.get('iso2'),
-                    "population": int(float(row.get('population', 0) or 0)), # Handle empty string population safely
+                    "population": int(float(row.get('population', 0) or 0)),
                     "capital_type": row.get('capital'),
-                    "id": row.get('id') # Added 'id' since it's in your headers
+                    "id": row.get('id')
                 }
                 data.append(city_entry)
 
@@ -48,12 +46,6 @@ def convert_csv_to_json(
         print(f"Successfully converted '{csv_filepath}' to '{json_filepath}'")
         print(f"Found {len(data)} cities (filtered for primary capitals: {filter_capitals_only})")
 
-    except FileNotFoundError:
-        print(f"Error: The file '{csv_filepath}' was not found.")
-    except KeyError as e:
-        print(f"Error: Missing expected column in CSV: {e}. This should not happen if headers match.")
-    except ValueError as e:
-        print(f"Error converting data type: {e}. Check numeric columns like 'lat', 'lng', 'population'.")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 

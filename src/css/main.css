@@ -40,21 +40,18 @@
     cursor: pointer;
 }
 
-/* Styles for icons */
+
 .icon {
 	cursor: pointer;
 }
 
 
-/*Weather */
-
-/* Styles for the weather widget */
 .Weather{
     text-align: center;
     padding: 2vw;
 }
 
-/* Styles for location text in weather widget */
+
 .locationText, input {
     color: #FFF;
     background-color: transparent;
@@ -65,7 +62,7 @@
     line-height: normal;
 }
 
-/* Styles for date text in weather widget */ 
+
 .dateText {
     color: #FFF;
     font-size: 1.2rem;
@@ -74,7 +71,7 @@
     line-height: normal;
 }
 
-/* Styles for temperature text in weather widget */
+
 .tempText {
     color: #FFF;
     font-size: 5.5rem;
@@ -83,7 +80,7 @@
     line-height: normal;
 }
 
-/* Styles for description text in weather widget */
+
 .descriptionText {
     color: #FFF;
     font-size: 1.5rem;
@@ -94,9 +91,6 @@
 
 
 
-/*Vehicle Widget */
-
- /* Styles for the vehicle widget */
 .vehicleWidget {
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.30);
@@ -106,7 +100,7 @@
 
 }
 
-/* Styles for vehicle text in vehicle widget */
+
 .vehicleText, .adviceTitle {
     color: #FFF;
     text-align: center;
@@ -117,7 +111,7 @@
 }
 
 
-/* Styles for the advice widget */
+
 .weatherWidget {
     display: flex;
     align-items: center;
@@ -135,7 +129,7 @@
     color: white;
 }
 
-/* Styles for advice text in advice widget */
+
 .adviceWidget {
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.30);

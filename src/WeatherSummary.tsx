@@ -21,7 +21,6 @@ const WeatherSummary: React.FC = () => {
     const lat = useSelector(selectCoordinates).lat
     const lng = useSelector(selectCoordinates).lng
 
-    // Fetch current weather data.
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`)
         .then(response => response.json())
         .then((data) => {
@@ -42,7 +41,6 @@ const WeatherSummary: React.FC = () => {
             console.error("Current Weather Fetch Error:", error);
         });
 
-    // Change background only when the weather description changes.
     useEffect(() => {
         changeBackground(weather)
         isRaining(weather)

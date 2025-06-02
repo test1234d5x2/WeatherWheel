@@ -1,47 +1,47 @@
 .carousel {
     position: relative;
-    max-width: 600px; /* Maximum width of the carousel */
-    margin: auto; /* Center the carousel horizontally */
-    overflow: hidden; /* Hides parts of the images that overflow the carousel's boundaries */
+    max-width: 600px;
+    margin: auto; 
+    overflow: hidden; 
 }
 
 .carousel-images {
-    display: flex; /* Use Flexbox */
-    justify-content: center; /* Center children horizontally */
-    align-items: center; /* Center children vertically */
-    height: 100%; /* Ensure it takes the full height of its parent */
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100%; 
 }
 .carousel-images .carousel-image {
-    display: none; /* Hide images by default */
-    mix-blend-mode: screen; /* Blend mode for images */
-    width: 7vw; /* Image width as a percentage of the viewport width */
-    height: 7vh; /* Image height as a percentage of the viewport height */
-    padding: 2em; /* Padding around images */
-    border: solid black; /* Border around images */
+    display: none;
+    mix-blend-mode: screen;
+    width: 7vw; 
+    height: 7vh; 
+    padding: 2em; 
+    border: solid black; 
 }
 
 .carousel-button {
-    position: absolute; /* Position the button absolutely relative to its positioned parent */
-    top: 50%; /* Position at the middle of the parent vertically */
-    transform: translateY(-50%); /* Offset the button by half of its height to center it */
-    background-color: #fff; /* Button background color */
-    border: none; /* No border for buttons */
-    cursor: pointer; /* Cursor changes to pointer to indicate a clickable item */
-    padding: 1rem; /* Padding inside the buttons */
-    z-index: 100; /* Stack order of the buttons */
+    position: absolute; 
+    top: 50%;
+    transform: translateY(-50%); 
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 1rem; 
+    z-index: 100; 
 }
 
 .prev {
-    left: 1rem; /* Position the previous button 10px from the left */
-    background: rgba(253, 254, 255, 0.30); /* Semi-transparent white background for the previous button */
+    left: 1rem;
+    background: rgba(253, 254, 255, 0.30);
 }
 
 .next {
-    right: 1rem; /* Position the next button 10px from the right */
-    background: rgba(253, 254, 255, 0.30); /* Semi-transparent white background for the next button */
+    right: 1rem;
+    background: rgba(253, 254, 255, 0.30);
 }
 
-/* Show the first image by default */
+
 .carousel-images .carousel-image:first-child {
-    display: block; /* Display the first image in the carousel */
+    display: block;
 }
