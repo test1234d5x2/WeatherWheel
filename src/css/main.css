@@ -5,25 +5,18 @@
     flex-direction: column;
     row-gap: 3rem;
     min-height: 100vh;
+    padding-bottom: 1rem;
 }
 
 .weatherSummaryContainer
 {
     display: flex;
     flex-direction: column;
+    align-items: center;
     row-gap: 1rem;
 }
 
-.locationInput{
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    height: fit-content;
-}
 
-/* Styles for editable areas */
 .editableArea {
 	display: flex;
 	align-items: center;
@@ -31,7 +24,7 @@
     flex-direction: row;
     column-gap: 1vw;
 }
-/* Styles for selectable areas */
+
 .selectableArea {
     margin: 0.25rem;
 	display: flex;
@@ -62,9 +55,8 @@
 }
 
 /* Styles for location text in weather widget */
-.Weather .locationText, input {
+.locationText, input {
     color: #FFF;
-    text-align: center;
     background-color: transparent;
     border: none;
     font-size: 2.3rem;
@@ -74,9 +66,8 @@
 }
 
 /* Styles for date text in weather widget */ 
-.Weather .dateText {
+.dateText {
     color: #FFF;
-    
     font-size: 1.2rem;
     font-style: normal;
     font-weight: 700;
@@ -84,9 +75,8 @@
 }
 
 /* Styles for temperature text in weather widget */
-.Weather .tempText {
+.tempText {
     color: #FFF;
-    
     font-size: 5.5rem;
     font-style: normal;
     font-weight: 700;
@@ -94,9 +84,8 @@
 }
 
 /* Styles for description text in weather widget */
-.Weather .descriptionText {
+.descriptionText {
     color: #FFF;
-    
     font-size: 1.5rem;
     font-style: normal;
     font-weight: 700;
@@ -193,6 +182,8 @@
 input {
     border: 1px solid white;
     border-radius: 0.5rem;
+    text-align: center;
+    width: 75%;
 }
 
 .mapSection {
@@ -202,5 +193,19 @@ input {
 
 a {
     color: white;
-    
+}
+
+
+
+.side-by-side-section {
+    display: flex;
+    column-gap: 2rem;
+}
+
+
+@media screen and (max-width: 700px) {
+    .side-by-side-section {
+        flex-direction: column;
+        row-gap: 2rem;
+    }
 }

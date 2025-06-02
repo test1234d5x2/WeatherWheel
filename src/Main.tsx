@@ -11,23 +11,6 @@ import changeBackground from "./utils/changeBackground";
 
 
 export const Main: React.FC = () => {
-    // TODO: Move to Weather Warnings now that we have Redux global state.
-    // useEffect(() => {
-    //     const name = selectPlaceName(store.getState())
-
-    //     if (name !== null) {
-    //         fetch(`https://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHERAPI_API_KEY}&q=${name}&days=1&aqi=no&alerts=yes`)
-    //             .then(response => response.json())
-    //             .then((data: WeatherAPIAlertsResponse) => {
-    //                 setAlerts(data.alerts.alert);
-    //             })
-    //             .catch(error => {
-    //                 console.error("Weather Alerts Fetch Error:", error);
-    //                 setAlerts(null); // Clear alerts on error
-    //             });
-    //     }
-    // }, []);
-
     const backgroundStyle = changeBackground(useSelector(selectWeather))
 
     return (
@@ -37,11 +20,9 @@ export const Main: React.FC = () => {
                     <WeatherSummary />
                 </section>
                 <section className="weatherWidget">
-                    <span className="arrow">&#8592;</span>
                     <ForecastData />
-                    <span className="arrow">&#8594;</span>
                 </section>
-                <section style={{display: "flex", columnGap: "2rem"}}>
+                <section className="side-by-side-section">
                     <section className="adviceWidget">
                         <div className="adviceTitle">Driving Advice</div>
                         <Advice />

@@ -1,3 +1,10 @@
+.map-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: scroll;
+}
+
 .mapLegendContainer {
     position: absolute;
     bottom: 50px;
@@ -38,18 +45,24 @@
 
 .side-panel {
     display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
     height: 100vh;
     z-index: 1000;
     background-color: white;
+    color: white;
 }
 
 .detailed-city-info-section-container {
-    flex: 99;
     overflow-x: scroll;
 }
+
+.detailed-city-info-section {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    overflow-x: scroll;
+    text-align: center;
+}
+
 
 .close-icon {
     margin: 0.5rem;
@@ -61,4 +74,21 @@
     height: 100vh;
     background-color: black;
     cursor: ew-resize;
+}
+
+
+.clickable {
+    cursor: pointer;
+}
+
+
+
+@media screen and (max-width: 650px) {
+    .side-panel {
+        min-width: 100vw;
+    }
+
+    .draggable-section {
+        display: none;
+    }
 }

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, Popup, LayersControl, useMap, useMapEvents } from 'react-leaflet';
-import { Icon, LatLngExpression, LatLngBoundsExpression } from "leaflet";
+import { Icon, LatLngExpression, LatLngBoundsExpression, latLng, LatLng } from "leaflet";
 import standardIcon from './css/assets/marker-icon-standard.png';
 import startIcon from './css/assets/marker-icon-start.png'
 import destinationIcon from './css/assets/marker-icon-destination.png'
-import { selectCoordinates, selectPlaceName } from "./store/locationStore";
-import { useSelector } from "react-redux";
+import { selectCoordinates, selectPlaceName, setMapLocation } from "./store/locationStore";
+import { useDispatch, useSelector } from "react-redux";
 import createCityLabel from "./utils/createLabel";
 import cities from './data/capital_cities.json'
 import CityWeatherDetails from "./types/cityWeatherDetails";
@@ -14,7 +14,8 @@ import getCorrectValue from "./utils/getCorrectValue";
 import LegendItemKey, { WEATHER_LAYER_LEGENDS } from "./constants/weatherLayerLegendItems";
 import changeBackground from "./utils/changeBackground";
 import { selectWeather } from "./store/weatherStore";
-
+import ForecastData from "./ForecastData";
+import WeatherSummary from "./WeatherSummary";
 
 const LegendItem: React.FC<LegendItemKey> = ({ hexCode, value }: LegendItemKey) => {
     return (
@@ -42,7 +43,9 @@ const MapInitializer: React.FC<{ onMapReady: (map: L.Map) => void }> = ({ onMapR
 
 
 export const Map: React.FC = () => {
+    const dispatch = useDispatch()
     const [mapInstance, setMapInstance] = useState<L.Map | null>(null)
+    const [mapLineCoordinates, setMapLineCoordinates] = useState<LatLng[]>()
     const [chosenWeatherLayer, setChosenWeatherLayer] = useState<string | null>(null)
     const [allCities, setAllCities] = useState<CityWeatherDetails[]>([])
     const [visibleCities, setVisibleCities] = useState<CityWeatherDetails[]>([])
@@ -50,6 +53,37 @@ export const Map: React.FC = () => {
     const [showDetailedInfo, setShowDetailedInfo] = useState<boolean>(false)
     const [leftPanelWidth, setLeftPanelWidth] = useState<number>(window.innerWidth * 0.25);
     const [isResizing, setIsResizing] = useState<boolean>(false);
+    const [startCoordinates, setStartCoordinates] = useState<LatLng>()
+    const [destinationCoordinates, setDestinationCoordinates] = useState<LatLng>()
+
+
+
+    useEffect(() => {
+        if (startCoordinates && destinationCoordinates ) {
+            fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${process.env.REACT_APP_OPEN_ROUTE_SECRVICES_API_KEY}&start=${startCoordinates.lng},${startCoordinates.lat}&end=${destinationCoordinates.lng},${destinationCoordinates.lat}`)
+                .then(response => response.json())
+                .then((data) => {
+                    let coordinates: LatLng[] = [];
+                    console.log(data)
+                    if (data.error !== undefined) {
+                        // An error code usually means that the API cannot find a route because
+                        // the approximate distance is larger than 6000km. In this case,
+                        // just add the start and end coordinates to give one straight line.
+                        console.warn("OpenRouteService Error:", data.error.message);
+                        coordinates.push(startCoordinates, destinationCoordinates)
+                    } else if (data.features && data.features.length > 0) {
+                        coordinates = data.features[0].geometry.coordinates.map((item: number[]) => [item[1], item[0]]);
+                    }
+                    setMapLineCoordinates(coordinates);
+                })
+                .catch(error => {
+                    console.error("OpenRouteService Fetch Error:", error);
+                    setMapLineCoordinates([]);
+                });
+        } else {
+            setMapLineCoordinates([]);
+        }
+    }, [startCoordinates, destinationCoordinates]);
 
 
     const leftPanel = useRef<HTMLDivElement>(null)
@@ -58,7 +92,7 @@ export const Map: React.FC = () => {
         const handleMouseMoveResize = (e: MouseEvent) => {
             if (isResizing) {
                 const newWidth = e.clientX
-                setLeftPanelWidth(Math.max(window.innerWidth * 0.25, Math.min(window.innerWidth * 0.75, newWidth)))
+                setLeftPanelWidth(Math.max(window.innerWidth * 0.25, Math.min(window.innerWidth * 0.5, newWidth)))
             }
         };
 
@@ -67,12 +101,12 @@ export const Map: React.FC = () => {
         };
 
         if (isResizing) {
-            window.addEventListener('mousemove', handleMouseMoveResize as unknown as EventListener);
+            window.addEventListener('mousemove', handleMouseMoveResize);
             window.addEventListener('mouseup', handleMouseUp);
         }
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMoveResize as unknown as EventListener);
+            window.removeEventListener('mousemove', handleMouseMoveResize);
             window.removeEventListener('mouseup', handleMouseUp);
         };
     }, [isResizing]);
@@ -94,14 +128,6 @@ export const Map: React.FC = () => {
     const lat = useSelector(selectCoordinates).lat
     const lng = useSelector(selectCoordinates).lng
     let defaultCentreLatLang: LatLngExpression = [lat, lng];
-
-    // if (startLat !== null && startLong !== null && endLat !== null && endLong !== null) {
-    //     defaultCentreLatLang = [(startLat + endLat) / 2, (startLong + endLong) / 2];
-    // } else if (startLat !== null && startLong !== null) {
-    //     defaultCentreLatLang = [startLat, startLong];
-    // } else if (endLat !== null && endLong !== null) {
-    //     defaultCentreLatLang = [endLat, endLong];
-    // }
 
 
     const defaultMarkerIcon = new Icon({
@@ -171,37 +197,38 @@ export const Map: React.FC = () => {
     }, [currentZoom])
 
 
-    const chosenWeatherPlaceMarker = (
-        <Marker position={defaultCentreLatLang} icon={defaultMarkerIcon}>
-            <Popup>
-                {chosenPlace}
-            </Popup>
-        </Marker>
-    )
+    const chosenWeatherPlaceMarker = <Marker position={defaultCentreLatLang} icon={defaultMarkerIcon} />
+    const startingPointMarker = startCoordinates ? <Marker position={startCoordinates} icon={startMarkerIcon} /> : ""
+    const destinationMarker = destinationCoordinates ? <Marker position={destinationCoordinates} icon={destinationMarkerIcon} /> : ""
 
     const backgroundStyle = changeBackground(useSelector(selectWeather))
 
-    // Marker for the starting point
-    // const startingPointMarker = startLat !== null && startLong !== null ? (
-    //     <Marker position={[startLat, startLong]} icon={defaultMarkerIcon}>
-    //         <Popup>
-    //             Beginning
-    //         </Popup>
-    //     </Marker>
-    // ) : null;
-
-    // // Marker for the destination point
-    // const destinationMarker = endLat !== null && endLong !== null ? (
-    //     <Marker position={[endLat, endLong]} icon={defaultMarkerIcon}>
-    //         <Popup>
-    //             Destination
-    //         </Popup>
-    //     </Marker>
-    // ) : null;
-
+    const chosenCity = useSelector(selectCoordinates)
 
     return (
-        <div style={{ width: "100vw", height: "100vh" }}>
+        <div className="map-container">
+            {
+                showDetailedInfo ?
+                    <section className="side-panel" style={{ width: `${leftPanelWidth}px`, backgroundImage: backgroundStyle }} ref={leftPanel}>
+                        <div className="detailed-city-info-section-container">
+                            <div className="material-symbols-outlined icon close-icon" onClick={() => setShowDetailedInfo(false)}>close</div>
+                            <div className="detailed-city-info-section">
+                                <WeatherSummary />
+                                <section className="weatherWidget">
+                                    <ForecastData />
+                                </section>
+                                <div>
+                                    <span className="clickable" onClick={() => setStartCoordinates(latLng(chosenCity.lat, chosenCity.lng))}>Set as Starting Place</span>
+                                </div>
+                                <div>
+                                    <span className="clickable" onClick={() => setDestinationCoordinates(latLng(chosenCity.lat, chosenCity.lng))}>Set as Destination</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="draggable-section" onMouseDown={handleMouseDownResizer}></div>
+                    </section> : ''
+            }
+
             <MapContainer center={defaultCentreLatLang} zoom={currentZoom} minZoom={3} style={{ height: '100%', width: "100%" }} worldCopyJump={false} maxBoundsViscosity={1.0} maxBounds={WORLD_BOUNDS}>
                 <MapInitializer onMapReady={handleMapInstanceReady} />
 
@@ -226,14 +253,14 @@ export const Map: React.FC = () => {
                     ))}
                 </LayersControl>
 
-                {/* {mapLineCoordinates.length > 0 && (
+                {mapLineCoordinates && mapLineCoordinates.length > 0 && (
                     <Polyline positions={mapLineCoordinates as LatLngExpression[]} pathOptions={{ color: "black", opacity: 1 }} />
-                )} */}
+                )}
 
                 {chosenWeatherPlaceMarker}
 
-                {/* {startingPointMarker} */}
-                {/* {destinationMarker} */}
+                {startingPointMarker}
+                {destinationMarker}
 
                 {
                     chosenWeatherLayer ? visibleCities.map((cityDetails: CityWeatherDetails) => {
@@ -243,7 +270,11 @@ export const Map: React.FC = () => {
                                 position={[cityDetails.lat, cityDetails.lng]}
                                 icon={createCityLabel(cityDetails.name, getCorrectValue(chosenWeatherLayer.toLowerCase(), cityDetails))}
                                 eventHandlers={{
-                                    click: (event) => setShowDetailedInfo(true)
+                                    click: (event) => {
+                                        dispatch(setMapLocation({ name: cityDetails.name, coordinates: { lat: cityDetails.lat, lng: cityDetails.lng } }))
+                                        setShowDetailedInfo(true)
+
+                                    }
                                 }}
                             >
 
@@ -261,61 +292,12 @@ export const Map: React.FC = () => {
 
 
             </MapContainer>
-
-            {
-                showDetailedInfo ?
-                    <section className="side-panel" style={{ width: `${leftPanelWidth}px`, backgroundImage: backgroundStyle }} ref={leftPanel}>
-                        <div className="detailed-city-info-section-container">
-                            <div className="detailed-city-info-section">
-                                <div className="material-symbols-outlined icon close-icon" onClick={() => setShowDetailedInfo(false)}>close</div>
-                            </div>
-                        </div>
-                        <div className="draggable-section" onMouseDown={handleMouseDownResizer}></div>
-                    </section> : ''
-            }
-
-
         </div>
     );
 };
 
 
 
-// Routing For Later Implementation
-
-// TODO: IMPLEMENT
-// useEffect(() => {
-//     if (startLocation.lat !== null && startLocation.long !== null && endLocation.lat !== null && endLocation.long !== null) {
-//         fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${process.env.REACT_APP_OPEN_ROUTE_SECRVICES_API_KEY}&start=${startLocation.long},${startLocation.lat}&end=${endLocation.long},${endLocation.lat}`)
-//             .then(response => response.json())
-//             .then((data) => {
-//                 let coordinates: number[][] = [];
-//                 if (data.error !== undefined) {
-//                     // An error code usually means that the API cannot find a route because
-//                     // the approximate distance is larger than 6000km. In this case,
-//                     // just add the start and end coordinates to give one straight line.
-//                     console.warn("OpenRouteService Error:", data.error.message);
-//                     if (startLocation.lat && endLocation.lat && startLocation.long && endLocation.long) {
-//                         coordinates.push([startLocation.lat, startLocation.long], [endLocation.lat, endLocation.long])
-//                     }
-//                 } else if (data.features && data.features.length > 0) {
-//                     // Gets the coordinates for the specific route (so that it can be placed as a line on the map).
-//                     coordinates = data.features[0].geometry.coordinates.map((item) => [item[1], item[0]]); // Convert [long, lat] to [lat, long]
-//                 }
-//                 setMapLineCoordinates(coordinates);
-//             })
-//             .catch(error => {
-//                 console.error("OpenRouteService Fetch Error:", error);
-//                 setMapLineCoordinates([]); // Clear coordinates on error
-//             });
-//     } else {
-//         // Clear map line coordinates if not both start and end locations are set
-//         setMapLineCoordinates([]);
-//     }
-// }, [startLocation.lat, startLocation.long, endLocation.lat, endLocation.long]);
-
-
-// Component to get and manage map events like zoom
 function MapEventsHandler({ setZoom }: { setZoom: (i: number) => void }) {
     useMapEvents({
         zoomend: (e) => {
